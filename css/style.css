@@ -4,6 +4,18 @@ body{
     margin: 0;
     font-family: 'Roboto', sans-serif;
 }
+
+h1{
+    color: #e48716;
+    font-size: 65px;
+    font-weight: bold;
+    letter-spacing: 4px;
+}
+
+h2{
+    color: aliceblue;
+}
+
 .header{
     height: 100vh;
     background-image: url(/img/PolygonLuminary.svg);
@@ -16,12 +28,12 @@ body{
 }
 
 .site-name:hover{
-    color: #cc7a14;
+    color: #e48716;
     scale: 1.1;
 }
 
 .fs-2{
-    color: #e38716;
+    color: #e48716;
 }
 
 .btn{
@@ -36,21 +48,21 @@ body{
     border-bottom: 4px solid #cc7a14;
     color: #1f2033;
     padding: 13px 22px 10px 22px;
-    background-color: #e38716;
+    background-color: #e48716;
 }
 
 .log-in:hover{
     color:  #1f2033;
-    background-color: #e38716;
-    border-bottom: 4px solid #cc7a14;
+    background-color: #e48716;
+    border-bottom: 4px solid #e48716;
     margin-right: 6px;
     scale: 1.1;
 }
 
 .sign-in{
     border: 1px solid #e38716;
-    border-bottom: 4px solid #cd9147;
-    color: #e38716;
+    border-bottom: 4px solid #e48716;
+    color: #e48716;
     margin-right: 6px;
     padding: 13px 22px 10px 22px;
 }
@@ -74,5 +86,29 @@ nav img{
     display: flex;
     justify-content: center;
     align-items: center;
-    
+}
+
+.big-card{
+    position:absolute;
+    transition: transform 800ms cubic-bezier(.02,1,.81,1.02);
+}
+
+.big-card:nth-child(1){
+    transform: translateX(40%) translateY(-40%) rotate(-10deg);
+}
+.big-card:nth-child(2){
+    transform: translateX(25%) translateY(-40%) rotate(-35deg);
+}
+.big-card:nth-child(3){
+    transform: translateX(50%) translateY(-40%) rotate(20deg);
+}
+
+.card-group:hover > .big-card:nth-child(1){
+    transform: translateX(40%) translateY(-20%) rotate(-10deg);
+}
+.card-group:hover > .big-card:nth-child(2){
+    transform: translateX(-13%) translateY(-60%) rotate(20deg);
+}
+.card-group:hover > .big-card:nth-child(3){
+    transform: translateX(80%) translateY(-55%) rotate(-20deg);
 }
