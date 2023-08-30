@@ -6,12 +6,18 @@ body{
 }
 .header{
     height: 100vh;
-    background-color: #1f2033;
+    background-image: url(/img/PolygonLuminary.svg);
+    background-size: cover;
 }
 
 .site-name{
     letter-spacing: 4px;
     font-weight: bold;
+}
+
+.site-name:hover{
+    color: #cc7a14;
+    scale: 1.1;
 }
 
 .fs-2{
@@ -29,35 +35,44 @@ body{
     border-right: none;
     border-bottom: 4px solid #cc7a14;
     color: #1f2033;
-    padding: 10px 20px 8px 20px;
+    padding: 13px 22px 10px 22px;
     background-color: #e38716;
-    opacity: 0.9;
 }
 
 .log-in:hover{
     color:  #1f2033;
-    opacity: 1;
     background-color: #e38716;
     border-bottom: 4px solid #cc7a14;
+    margin-right: 6px;
+    scale: 1.1;
 }
 
 .sign-in{
-    opacity: 0.9;
     border: 1px solid #e38716;
     border-bottom: 4px solid #cd9147;
     color: #e38716;
-    padding: 10px 20px 8px 20px;
+    margin-right: 6px;
+    padding: 13px 22px 10px 22px;
 }
 
 .sign-in:hover{
-    opacity: 1;
     color: #1f2033;
     background-color: #e38716;
     border: 1px solid #cd9147;
     border-bottom: 4px solid #cd9147;
+    margin-left: 6px;
+    scale: 1.1;
 }
 
 nav img{
     width: 10%;
     height: 10%;
+}
+
+.row-header{
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
 }
