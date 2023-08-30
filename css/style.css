@@ -107,8 +107,8 @@ nav img{
     transform: translateX(40%) translateY(-20%) rotate(-10deg);
 }
 .card-group:hover > .big-card:nth-child(2){
-    transform: translateX(-13%) translateY(-60%) rotate(20deg);
+    transform: translateX(-13%) translateY(-60%) rotate(-2deg);
 }
 .card-group:hover > .big-card:nth-child(3){
-    transform: translateX(80%) translateY(-55%) rotate(-20deg);
+    transform: translateX(80%) translateY(-55%) rotate(-4deg);
 }
