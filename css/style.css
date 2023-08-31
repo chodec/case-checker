@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+.primary-text-color{
+    color: #e48716;
+}
+
+.secondary-text-color{
+    color: #1f2033;
+}
+
+.tertiary-text-color{
+    color: #fcf3e8;
+}
+
+.spacing-4{
+    letter-spacing: 4px;
+}
+
+.text-bold{
+    font-weight: bold;
+}
+
+body{
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+h1{
+    font-size: 65px;
+    text-shadow: 2px 2px 2px #1f2033;
+}
+
+nav img{
+    width: 10%;
+    height: 10%;
+}
+
+.header{
+    height: 100vh;
+    background-image: url(/img/PolygonLuminary.svg);
+    background-size: cover;
+}
+
+.steam{
+    padding: 10px;
+    background: rgb(20,35,60);
+    background: linear-gradient(175deg, rgba(20,35,60,1) 0%, rgba(16,136,181,1) 100%);
+}
+
+.site-name:hover{
+    color: #e48716;
+    scale: 1.1;
+}
+
+.btn{
+    margin: 3px;
+    border-bottom: 4px solid #cc7a14;
+    padding: 13px 22px 10px 22px;
+}
+
+.log-in{
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    background-color: #e48716;
+}
+
+.log-in:hover{
+    color:  #1f2033;
+    background-color: #e48716;
+    margin-right: 6px;
+    scale: 1.1;
+}
+
+.sign-in{
+    border: 1px solid #e38716;
+    border-bottom: 4px solid #e48716;
+    margin-right: 6px;
+}
+
+.sign-in:hover{
+    color: #1f2033;
+    background-color: #e38716;
+    border: 1px solid #cd9147;
+    border-bottom: 4px solid #cd9147;
+    margin-left: 6px;
+    scale: 1.1;
+}
+
+.row-header{
+    height: 72vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*Items + hover animation*/
+.big-card{
+    position:absolute;
+    transition: transform 800ms cubic-bezier(.02,1,.81,1.02);
+}
+
+.big-card:nth-child(1){
+    transform: translateX(40%) translateY(-40%) rotate(-10deg);
+}
+.big-card:nth-child(2){
+    transform: translateX(25%) translateY(-40%) rotate(-35deg);
+}
+.big-card:nth-child(3){
+    transform: translateX(50%) translateY(-40%) rotate(20deg);
+}
+
+.card-group:hover > .big-card:nth-child(1){
+    transform: translateX(40%) translateY(-10%) rotate(-10deg);
+}
+.card-group:hover > .big-card:nth-child(2){
+    transform: translateX(-13%) translateY(-60%) rotate(-2deg);
+}
+.card-group:hover > .big-card:nth-child(3){
+    transform: translateX(80%) translateY(-55%) rotate(-4deg);
+}
