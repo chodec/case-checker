@@ -10,9 +10,10 @@ h1{
     font-size: 65px;
     font-weight: bold;
     letter-spacing: 4px;
+    text-shadow: 2px 2px 2px black;
 }
 
-h2{
+h3{
     color: aliceblue;
 }
 
@@ -25,6 +26,13 @@ h2{
 .site-name{
     letter-spacing: 4px;
     font-weight: bold;
+}
+
+.steam{
+    padding: 10px;
+    color: aliceblue;
+    background: rgb(20,35,60);
+    background: linear-gradient(175deg, rgba(20,35,60,1) 0%, rgba(16,136,181,1) 100%);
 }
 
 .site-name:hover{
@@ -82,7 +90,7 @@ nav img{
 }
 
 .row-header{
-    height: 50vh;
+    height: 72vh;
     display: flex;
     justify-content: center;
     align-items: center;
