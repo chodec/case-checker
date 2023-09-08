@@ -20,6 +20,27 @@
     font-weight: bold;
 }
 
+.mb-4{
+    margin-bottom: 4px;
+}
+
+.header-viewport{
+    height: 72vh;
+}
+
+.font-s-26{
+    font-size: 26px;
+}
+
+.primary-border{
+    border: 1px solid #cd9147;
+}
+
+.form-control::placeholder{
+    color:#fcf3e8;
+    filter: brightness(43%);
+}
+
 body{
     margin: 0;
     font-family: 'Roboto', sans-serif;
@@ -37,6 +58,10 @@ nav img{
 
 .header{
     height: 100vh;
+    background-color: #161618;
+}
+
+.header-svg{
     background-image: url(/img/PolygonLuminary.svg);
     background-size: cover;
 }
@@ -68,12 +93,12 @@ nav img{
 .log-in:hover{
     color:  #1f2033;
     background-color: #e48716;
+    border-bottom: 4px solid #cd9147;
     margin-right: 6px;
     scale: 1.1;
 }
 
 .sign-in{
-    border: 1px solid #e38716;
     border-bottom: 4px solid #e48716;
     margin-right: 6px;
 }
@@ -88,10 +113,19 @@ nav img{
 }
 
 .row-header{
-    height: 72vh;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/*Register*/
+
+.input{
+    background-color: transparent;
+}
+
+.row-register{
+    padding: 67px;
 }
 
 /*Items + hover animation*/
