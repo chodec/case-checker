@@ -130,18 +130,27 @@ nav img{
 
 /*Items + hover animation*/
 .big-card{
-    position:absolute;
+    position: absolute;
     transition: transform 800ms cubic-bezier(.02,1,.81,1.02);
 }
 
 .big-card:nth-child(1){
-    transform: translateX(40%) translateY(-40%) rotate(-10deg);
+    transform: translateX(10%) translateY(-35%) rotate(-20deg);
 }
 .big-card:nth-child(2){
-    transform: translateX(25%) translateY(-40%) rotate(-35deg);
+    transform: translateX(30%) translateY(-45%) rotate(1deg);
 }
 .big-card:nth-child(3){
-    transform: translateX(50%) translateY(-40%) rotate(20deg);
+    transform: translateX(50%) translateY(-55%) rotate(20deg);
+}
+.big-card:nth-child(4){
+    transform: translateX(70%) translateY(-65%) rotate(40deg);
+}
+.big-card:nth-child(5){
+    transform: translateX(40%) translateY(-47%) rotate(20deg);
+}
+.big-card:nth-child(6){
+    transform: translateX(90%) translateY(-50%) rotate(30deg);
 }
 
 .card-group:hover > .big-card:nth-child(1){
@@ -151,5 +160,14 @@ nav img{
     transform: translateX(-13%) translateY(-60%) rotate(-2deg);
 }
 .card-group:hover > .big-card:nth-child(3){
+    transform: translateX(80%) translateY(-55%) rotate(-4deg);
+}
+.card-group:hover > .big-card:nth-child(4){
+    transform: translateX(80%) translateY(-55%) rotate(-4deg);
+}
+.card-group:hover > .big-card:nth-child(5){
+    transform: translateX(80%) translateY(-55%) rotate(-4deg);
+}
+.card-group:hover > .big-card:nth-child(6){
     transform: translateX(80%) translateY(-55%) rotate(-4deg);
 }
