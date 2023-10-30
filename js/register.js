@@ -4,7 +4,12 @@ let nickname = document.getElementById('nickname')
 let passwordRepeat = document.getElementById('passwordRepeat')
 
 const nicknameHandler = function(e) {
-    console.log(nickname.value);
+    let nicknameLength = nickname.value
+    
+    if (nicknameLength.length > 3) {
+        nickname.style.borderColor = "green"
+        nickname.style.boxShadow = "3px 3px green"
+    }
 }
 
 nickname.addEventListener('keydown', nicknameHandler)
