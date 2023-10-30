@@ -132,6 +132,13 @@ nav img{
     padding: 67px;
 }
 
+.form-control:focus{
+    background-color: transparent;
+    color: #fcf3e8;
+    border: 2px solid #e48716;
+    box-shadow: 3px 3px #e48716;
+}
+
 /*Items + hover animation*/
 .big-card{
     position: absolute;
