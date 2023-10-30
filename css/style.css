@@ -20,6 +20,10 @@
     font-weight: bold;
 }
 
+.hidden{
+   visibility: hidden; 
+}
+
 .mb-4{
     margin-bottom: 4px;
 }
@@ -80,7 +84,7 @@ nav img{
 .btn{
     margin: 3px;
     border-bottom: 4px solid #cc7a14;
-    padding: 13px 22px 10px 22px;
+    padding: 11px 19px 9px 19px;
 }
 
 .log-in{
