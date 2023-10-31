@@ -132,6 +132,10 @@ nav img{
     padding: 67px;
 }
 
+small{
+    color: red!important;
+}
+
 .form-control:focus{
     background-color: transparent;
     color: #fcf3e8;
