@@ -36,10 +36,8 @@ const emailHandler = function() {
     }
 }
 
-
 const passwordHandler = function() {
     let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/gm
-    console.log(password.length);
     if (password.value.match(passwordPattern)) {
         changeBorder(password, "green", "3px 3px green")
         passwordHelp.classList.add('hidden')
@@ -49,9 +47,21 @@ const passwordHandler = function() {
     }
 }
 
+const matchingPasswordHandler = function () {
+    if (password.value === passwordRepeat.value) {
+        changeBorder(passwordRepeat, "green", "3px 3px green")
+        passwordRepeatHelp.classList.add('hidden')
+    } else {
+        changeBorder(passwordRepeat, "red", "3px 3px red")
+        passwordRepeatHelp.classList.remove('hidden')
+    }
+}
+
 nickname.addEventListener('change', nicknameHandler)
-nickname.addEventListener('keydown', nicknameHandler)
+nickname.addEventListener('keyup', nicknameHandler)
 email.addEventListener('change', emailHandler)
-email.addEventListener('keydown', emailHandler)
+email.addEventListener('keyup', emailHandler)
 password.addEventListener('change', passwordHandler)
-password.addEventListener('keydown', passwordHandler)
+password.addEventListener('keyup', passwordHandler)
+passwordRepeat.addEventListener('change', matchingPasswordHandler)
+passwordRepeat.addEventListener('keyup', matchingPasswordHandler)
