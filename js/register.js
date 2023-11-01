@@ -7,54 +7,44 @@ let passwordHelp = document.getElementById('passwordHelp')
 let nicknameHelp = document.getElementById('nicknameHelp')
 let passwordRepeatHelp = document.getElementById('passwordRepeatHelp')
 
-const changeBorder = function (dom, borderColor, boxShadow) {
-    dom.style.borderColor = borderColor
-    dom.style.boxShadow = boxShadow
-    dom.style.color = "white" 
+const changeBorder =  (dom, domHelper, status) => {
+    if (status === 'failed') {
+        dom.style.borderColor = "red"
+        dom.style.boxShadow = "3px 3px red"
+        dom.style.color = "white"
+        domHelper.classList.remove('hidden')
+    } else if (status === 'passed') {
+        dom.style.borderColor = "green"
+        dom.style.boxShadow = "3px 3px green"
+        dom.style.color = "white"
+        domHelper.classList.add('hidden')
+    }
 }
 
 const nicknameHandler = function() {
     let nicknameLength = nickname.value
-    
-    if (nicknameLength.length > 2) {
-        changeBorder(nickname, "green", "3px 3px green")
-        nicknameHelp.classList.add('hidden')
-    } else {
-        changeBorder(nickname, "red", "3px 3px red")
-        nicknameHelp.classList.remove('hidden')
-    }
+    nicknameLength.length > 2 ?
+     changeBorder(nickname, nicknameHelp, 'passed') :
+      changeBorder(nickname, nicknameHelp, 'failed')
 }
 const emailHandler = function() {
     let emailPattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
-    
-    if (email.value.match(emailPattern)) {
-        changeBorder(email, "green", "3px 3px green")
-        emailHelp.classList.add('hidden')
-    } else {
-        changeBorder(email, "red", "3px 3px red")
-        emailHelp.classList.remove('hidden')
-    }
+    email.value.match(emailPattern) ?
+     changeBorder(email, emailHelp, 'passed') :
+      changeBorder(email, emailHelp)
 }
 
 const passwordHandler = function() {
     let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/gm
-    if (password.value.match(passwordPattern)) {
-        changeBorder(password, "green", "3px 3px green")
-        passwordHelp.classList.add('hidden')
-    } else {
-        changeBorder(password, "red", "3px 3px red")
-        passwordHelp.classList.remove('hidden')
-    }
+    password.value.match(passwordPattern) ?
+     changeBorder(password, passwordHelp, 'passed') :
+      changeBorder(password, passwordHelp, 'failed')
 }
 
 const matchingPasswordHandler = function () {
-    if (password.value === passwordRepeat.value) {
-        changeBorder(passwordRepeat, "green", "3px 3px green")
-        passwordRepeatHelp.classList.add('hidden')
-    } else {
-        changeBorder(passwordRepeat, "red", "3px 3px red")
-        passwordRepeatHelp.classList.remove('hidden')
-    }
+    password.value === passwordRepeat.value ?
+     changeBorder(passwordRepeat, passwordRepeatHelp, 'passed') :
+      changeBorder(passwordRepeat, passwordRepeatHelp, 'failed')
 }
 
 nickname.addEventListener('change', nicknameHandler)
