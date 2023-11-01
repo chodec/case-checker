@@ -31,7 +31,7 @@ const emailHandler = function() {
     let emailPattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
     email.value.match(emailPattern) ?
      changeBorder(email, emailHelp, 'passed') :
-      changeBorder(email, emailHelp)
+      changeBorder(email, emailHelp, 'failed')
 }
 
 const passwordHandler = function() {

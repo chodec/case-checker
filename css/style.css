@@ -59,7 +59,9 @@ nav img{
     width: 10%;
     height: 10%;
 }
-
+small{
+    color: red!important;
+}
 .header{
     height: 100vh;
     background-color: #161618;
@@ -132,17 +134,20 @@ nav img{
     padding: 67px;
 }
 
-small{
-    color: red!important;
-}
-
 .form-control:focus{
     background-color: transparent;
     color: #fcf3e8;
     border: 2px solid #e48716;
     box-shadow: 3px 3px #e48716;
 }
-
+.register-border{
+    box-shadow: 0px 0px 85px 10px rgba(228,135,22,0.63);
+}
+.register-h1{
+    text-align: center;
+    padding-bottom: 30px;
+    color: #fcf3e8;
+}
 /*Items + hover animation*/
 .big-card{
     position: absolute;
