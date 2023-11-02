@@ -131,7 +131,7 @@ small{
 /*Register*/
 
 .input{
-    background-color: transparent;
+    background-color: transparent!important;
 }
 
 .row-register{
