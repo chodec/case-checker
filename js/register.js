@@ -6,16 +6,19 @@ let emailHelp = document.getElementById('emailHelp')
 let passwordHelp = document.getElementById('passwordHelp')
 let nicknameHelp = document.getElementById('nicknameHelp')
 let passwordRepeatHelp = document.getElementById('passwordRepeatHelp')
+let rowRegister = document.getElementsByClassName('row-register')[0]
 
 const changeBorder =  (dom, domHelper, status) => {
+    let registerPadding = window.getComputedStyle(rowRegister,null).getPropertyValue('padding')
+    rowRegister.style.padding = parseFloat(registerPadding) - 8
     if (status === 'failed') {
         dom.style.borderColor = "red"
-        dom.style.boxShadow = "3px 3px red"
+        dom.style.boxShadow = "0.25rem 0.25rem red"
         dom.style.color = "white"
         domHelper.classList.remove('hidden')
     } else if (status === 'passed') {
         dom.style.borderColor = "green"
-        dom.style.boxShadow = "3px 3px green"
+        dom.style.boxShadow = "0.25rem 0.25rem green"
         dom.style.color = "white"
         domHelper.classList.add('hidden')
     }
