@@ -83,10 +83,14 @@ small{
     scale: 1.1;
 }
 
-.btn{
+.btn-default{
     margin: 3px;
     border-bottom: 4px solid #cc7a14;
     padding: 11px 19px 9px 19px;
+}
+
+.btn-big{
+    width: 100%;
 }
 
 .log-in{
@@ -131,7 +135,7 @@ small{
 }
 
 .row-register{
-    padding: 67px;
+    padding: 5%;
 }
 
 .form-control:focus{
