@@ -155,6 +155,11 @@ small{
     padding-bottom: 30px;
     color: #fcf3e8;
 }
+.btn:disabled{
+  border: 1px solid #e48716;
+  background-color: #e48716;
+  color: #fcf3e8;
+}
 /*Items + hover animation*/
 .big-card{
     position: absolute;
