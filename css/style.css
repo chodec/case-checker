@@ -37,7 +37,11 @@
 }
 
 .primary-border{
-    border: 1px solid #cd9147;
+    border: 1px solid #e48716;
+}
+
+.primary-background{
+    background-color: #e48716;
 }
 
 .form-control::placeholder{
@@ -85,7 +89,7 @@ small{
 
 .btn-default{
     margin: 3px;
-    border-bottom: 4px solid #cc7a14;
+    border-bottom: 4px solid #e48716;
     padding: 11px 19px 9px 19px;
 }
 
@@ -97,7 +101,6 @@ small{
     border-top: none;
     border-left: none;
     border-right: none;
-    background-color: #e48716;
 }
 
 .log-in:hover{
