@@ -53,13 +53,11 @@ const matchingPasswordHandler = () => {
 const validateForm = () => {
     let nicknameLength = nickname.value
     if (nicknameLength.length > 2 && email.value.match(emailPattern) && password.value.match(passwordPattern) && password.value === passwordRepeat.value){
-        
         button.disabled = false
     }
 }
 
 elArr.forEach((element) => {
-    console.log(element);
     element.addEventListener('change', validateForm)
     element.addEventListener('keyup', validateForm)
 })
