@@ -6,11 +6,13 @@ let emailHelp = document.getElementById('emailHelp')
 let passwordHelp = document.getElementById('passwordHelp')
 let nicknameHelp = document.getElementById('nicknameHelp')
 let passwordRepeatHelp = document.getElementById('passwordRepeatHelp')
-let rowRegister = document.getElementsByClassName('row-register')[0]
+let elArr = document.querySelectorAll("input");
+let button = document.getElementById('submit')
+
+const emailPattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
+const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/gm
 
 const changeBorder =  (dom, domHelper, status) => {
-    let registerPadding = window.getComputedStyle(rowRegister,null).getPropertyValue('padding')
-    rowRegister.style.padding = parseFloat(registerPadding) - 8
     if (status === 'failed') {
         dom.style.borderColor = "red"
         dom.style.boxShadow = "0.25rem 0.25rem red"
@@ -24,31 +26,43 @@ const changeBorder =  (dom, domHelper, status) => {
     }
 }
 
-const nicknameHandler = function() {
+const nicknameHandler = () => {
     let nicknameLength = nickname.value
     nicknameLength.length > 2 ?
      changeBorder(nickname, nicknameHelp, 'passed') :
       changeBorder(nickname, nicknameHelp, 'failed')
 }
-const emailHandler = function() {
-    let emailPattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
+const emailHandler = () => {
     email.value.match(emailPattern) ?
      changeBorder(email, emailHelp, 'passed') :
       changeBorder(email, emailHelp, 'failed')
 }
 
-const passwordHandler = function() {
-    let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/gm
+const passwordHandler = () => {
     password.value.match(passwordPattern) ?
      changeBorder(password, passwordHelp, 'passed') :
       changeBorder(password, passwordHelp, 'failed')
 }
 
-const matchingPasswordHandler = function () {
+const matchingPasswordHandler = () => {
     password.value === passwordRepeat.value ?
      changeBorder(passwordRepeat, passwordRepeatHelp, 'passed') :
       changeBorder(passwordRepeat, passwordRepeatHelp, 'failed')
 }
+
+const validateForm = () => {
+    let nicknameLength = nickname.value
+    if (nicknameLength.length > 2 && email.value.match(emailPattern) && password.value.match(passwordPattern) && password.value === passwordRepeat.value){
+        
+        button.disabled = false
+    }
+}
+
+elArr.forEach((element) => {
+    console.log(element);
+    element.addEventListener('change', validateForm)
+    element.addEventListener('keyup', validateForm)
+})
 
 nickname.addEventListener('change', nicknameHandler)
 nickname.addEventListener('keyup', nicknameHandler)
@@ -58,3 +72,6 @@ password.addEventListener('change', passwordHandler)
 password.addEventListener('keyup', passwordHandler)
 passwordRepeat.addEventListener('change', matchingPasswordHandler)
 passwordRepeat.addEventListener('keyup', matchingPasswordHandler)
+button.addEventListener('click', (e) =>{
+    e.preventDefault()
+})
