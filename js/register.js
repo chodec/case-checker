@@ -6,8 +6,10 @@ let emailHelp = document.getElementById('emailHelp')
 let passwordHelp = document.getElementById('passwordHelp')
 let nicknameHelp = document.getElementById('nicknameHelp')
 let passwordRepeatHelp = document.getElementById('passwordRepeatHelp')
-let elArr = document.querySelectorAll("input");
+let elArr = document.querySelectorAll('input')
 let button = document.getElementById('submit')
+let iconHide = document.getElementById('hide')
+let iconShow = document.getElementById('show')
 
 const emailPattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/gm
@@ -25,7 +27,17 @@ const changeBorder =  (dom, domHelper, status) => {
         domHelper.classList.add('hidden')
     }
 }
-
+const showHide = () => {
+    if (iconShow.classList.contains('hidden')) {
+        iconHide.classList.add('hidden')
+        iconShow.classList.remove('hidden')
+        password.type = 'nickname'
+    } else {
+        iconHide.classList.remove('hidden')
+        iconShow.classList.add('hidden')
+        password.type = 'password'
+    }
+}
 const nicknameHandler = () => {
     let nicknameLength = nickname.value
     nicknameLength.length > 2 ?
@@ -70,6 +82,8 @@ password.addEventListener('change', passwordHandler)
 password.addEventListener('keyup', passwordHandler)
 passwordRepeat.addEventListener('change', matchingPasswordHandler)
 passwordRepeat.addEventListener('keyup', matchingPasswordHandler)
+iconHide.addEventListener('click', showHide)
+iconShow.addEventListener('click', showHide)
 button.addEventListener('click', (e) =>{
     e.preventDefault()
 })

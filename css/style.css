@@ -32,8 +32,8 @@
     height: 72vh;
 }
 
-.font-s-26{
-    font-size: 26px;
+.font-s-21{
+    font-size: 21px;
 }
 
 .primary-border{
@@ -163,6 +163,15 @@ small{
 .big-card{
     position: absolute;
     transition: transform 800ms cubic-bezier(.02,1,.81,1.02);
+}
+
+.showHide {
+    float: right;
+    margin-right: 12px;
+    margin-top: -26px;
+    position: relative;
+    z-index: 2;
+    color: #161618;
 }
 
 .big-card:nth-child(1){
