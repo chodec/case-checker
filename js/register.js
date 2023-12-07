@@ -66,6 +66,8 @@ const validateForm = () => {
     let nicknameLength = nickname.value
     if (nicknameLength.length > 2 && email.value.match(emailPattern) && password.value.match(passwordPattern) && password.value === passwordRepeat.value){
         button.disabled = false
+    } else {
+        button.disabled = true
     }
 }
 
