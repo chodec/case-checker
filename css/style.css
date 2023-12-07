@@ -24,10 +24,6 @@
    visibility: hidden; 
 }
 
-.mb-4{
-    margin-bottom: 0.75rem!important;
-}
-
 .header-viewport{
     height: 72vh;
 }
@@ -91,6 +87,9 @@ small{
     margin: 3px;
     border-bottom: 4px solid #e48716;
     padding: 11px 19px 9px 19px;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    transition: all .6s;
 }
 
 .btn-big{
@@ -110,7 +109,6 @@ small{
     margin-right: 6px;
     scale: 1.1;
 }
-
 .sign-in{
     border-bottom: 4px solid #e48716;
     margin-right: 6px;
@@ -125,6 +123,7 @@ small{
     scale: 1.1;
 }
 
+
 .row-header{
     display: flex;
     justify-content: center;
@@ -138,7 +137,8 @@ small{
 }
 
 .row-register{
-    padding: 3%;
+    padding: 4%;
+    border-radius: 17px;
 }
 
 .form-control:focus{
