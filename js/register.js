@@ -11,6 +11,8 @@ let button = document.getElementById('submit')
 let iconHide = document.getElementById('hide')
 let iconShow = document.getElementById('show')
 
+let xhttp = new XMLHttpRequest();
+
 const emailPattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/gm
 
@@ -88,4 +90,10 @@ iconHide.addEventListener('click', showHide)
 iconShow.addEventListener('click', showHide)
 button.addEventListener('click', (e) =>{
     e.preventDefault()
+    const user = {nickname: nickname.value, email: email.value, password: password.value}
+    let jsonUser = JSON.stringify(user)
+    xhttp.open("POST", "http://localhost:3000/", true)
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    console.log(jsonUser);
+    xhttp.send(jsonUser)
 })
