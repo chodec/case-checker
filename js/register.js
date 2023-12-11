@@ -94,6 +94,5 @@ button.addEventListener('click', (e) =>{
     let jsonUser = JSON.stringify(user)
     xhttp.open("POST", "http://localhost:3000/", true)
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-    console.log(jsonUser);
     xhttp.send(jsonUser)
 })

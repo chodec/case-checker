@@ -133,7 +133,7 @@ small{
 /*Register*/
 
 .input{
-    background-color: transparent!important;
+    background-color: #2d2d2f;
 }
 
 .row-register{
@@ -146,6 +146,12 @@ small{
     color: #fcf3e8;
     border: 1px solid #e48716;
     box-shadow: 4px 4px #e48716;
+}
+input:-webkit-autofill{
+    -webkit-text-fill-color: #fcf3e8 !important;
+    -webkit-box-shadow: 0 0 0px 20px #2d2d2f inset!important;
+    transition: background-color 5000s ease-in-out 0s;
+    font-size: 1rem;
 }
 .register-border{
     box-shadow: 0px 0px 85px 10px rgba(228,135,22,0.63);
@@ -171,7 +177,7 @@ small{
     margin-top: -26px;
     position: relative;
     z-index: 2;
-    color: #161618;
+    color: #fcf3e8;
 }
 
 .big-card:nth-child(1){
