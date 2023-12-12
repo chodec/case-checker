@@ -90,9 +90,7 @@ iconHide.addEventListener('click', showHide)
 iconShow.addEventListener('click', showHide)
 button.addEventListener('click', (e) =>{
     e.preventDefault()
-    const user = {nickname: nickname.value, email: email.value, password: password.value}
-    let jsonUser = JSON.stringify(user)
     xhttp.open("POST", "http://localhost:3000/", true)
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-    xhttp.send(jsonUser)
+    xhttp.send(`nickname=${nickname.value}&email=${email.value}&password=${password.value}`)
 })
