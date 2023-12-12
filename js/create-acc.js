@@ -21,7 +21,10 @@ app.post('/', function(req, res){
     const data = req.body
     passHash = data.password
     bcrypt.genSalt(saltRounds, (err, salt ) => {
-      
+      bcrypt.hash(passHash, salt, (err, hash) => {
+        console.log(err)
+        console.log(hash)
+      })
     })
  })
 
