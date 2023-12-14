@@ -15,8 +15,8 @@ const app = express()
 const port = 3000
 
 const saltRounds = 10
-let passHash
-let emailHash
+let passHash = ''
+let emailHash = ''
 
 
 
@@ -33,14 +33,6 @@ const insertUser = async (username, email, pass) => {
   } finally {
       await client.end()
   }
-}
-
-const hashData = (str) => {
-  bcrypt.genSalt(saltRounds, (err, salt ) => {
-    bcrypt.hash(str, salt, (err, hash) => {
-      console.log(hash);
-    })
-  })
 }
 
 app.use(bodyParser.urlencoded({extended: true}))
