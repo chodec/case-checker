@@ -7,7 +7,7 @@ const client = new Client({
   user: 'postgres',
   host: 'localhost',
   database: 'users',
-  password: '',
+  password: 'F.aq9173',
   port: 5432,
 })
 
@@ -38,7 +38,7 @@ const insertUser = async (username, email, pass) => {
 const hashData = (str) => {
   bcrypt.genSalt(saltRounds, (err, salt ) => {
     bcrypt.hash(str, salt, (err, hash) => {
-  
+      console.log(hash);
     })
   })
 }
@@ -47,19 +47,17 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 app.use(bodyParser.json());
 
-// app.get('/', (req, res) => {
-//   res.send('Hello  kokot!')
-// })
-
 app.post('/', function(req, res){
     const data = req.body
-    passHash = hashData(data.password)
-    emailHash = hashData(data.email)
-    insertUser(data.nickname, emailHash, passHash).then(result => {
-      if (result) {
-          console.log(result);
-      }
-  });
+    bcrypt.genSalt(saltRounds, (err, salt ) => {
+      bcrypt.hash(data.password, salt, (err, hash) => {
+        insertUser(data.nickname, data.email, hash).then(result => {
+          if (result) {
+              console.log(result);
+          }
+      });
+      })
+    })
  })
 
 app.listen(port, () => {
