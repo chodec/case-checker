@@ -19,7 +19,7 @@ const insertUser = async (username, email, pass, id) => {
     user: 'postgres',
     host: 'localhost',
     database: 'users',
-    password: 'F.aq9173',
+    password: '',
     port: '5432'
   })
   
@@ -43,7 +43,7 @@ const validateDuplicate = async (email) => {
     user: 'postgres',
     host: 'localhost',
     database: 'users',
-    password: 'F.aq9173',
+    password: '',
     port: '5432'
   })
 
