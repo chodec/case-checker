@@ -12,15 +12,13 @@ const client = new Client({
   port: '5432'
 })
 const pool = new Pool()
-let response
+let queryDuplicate
+let duplicate
 
 const app = express()
 const port = 3000
 
 const saltRounds = 10
-let passHash = ''
-let emailHash = ''
-let id = ''
 
 const insertUser = async (username, email, pass, id) => {
   try {
@@ -40,14 +38,19 @@ const insertUser = async (username, email, pass, id) => {
 const validateDuplicate = async (email) => {
   try {
       await client.connect()
-      response = await client.query(`SELECT email FROM users WHERE email = $1`, [email])
+      queryDuplicate = await client.query(`SELECT COUNT(email) FROM users WHERE email = $1`, [email])
+      console.log(queryDuplicate.rows[0].count)
+      if (queryDuplicate.rows[0].count === '0') {
+        duplicate = false
+      } else {
+        duplicate = true
+      }
       return true
   } catch (error) {
       console.error(error.stack)
       return false
   } finally {
       await client.end()
-      response.rows[0].email === undefined ? response = true : response = false
   }
 }
 
@@ -58,7 +61,7 @@ app.use(bodyParser.json());
 app.post('/', function(req, res){
     const data = req.body
     validateDuplicate(data.email).then(result => {
-      if (response === true) {
+      if (duplicate === true) {
         console.log('Acc already exists.')
       } else {
         console.log('Acc does not exist.')
