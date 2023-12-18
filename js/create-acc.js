@@ -4,13 +4,6 @@ const bodyParser = require("body-parser")
 const { Client, Pool } = require('pg')
 const { v4: uuidv4,} = require('uuid');
 
-const client = new Client({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'users',
-  password: 'F.aq9173',
-  port: '5432'
-})
 const pool = new Pool()
 let queryDuplicate
 let duplicate
@@ -21,8 +14,17 @@ const port = 3000
 const saltRounds = 10
 
 const insertUser = async (username, email, pass, id) => {
+
+  const client = new Client({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'users',
+    password: 'F.aq9173',
+    port: '5432'
+  })
+  
   try {
-      await pool.connect()
+      await client.connect()
       await client.query(
           `INSERT INTO users (username, email, pass, id) 
            VALUES ($1, $2, $3, $4)`, [username, email, pass, id])
@@ -36,10 +38,19 @@ const insertUser = async (username, email, pass, id) => {
 }
 
 const validateDuplicate = async (email) => {
+
+  const client = new Client({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'users',
+    password: 'F.aq9173',
+    port: '5432'
+  })
+
   try {
       await client.connect()
       queryDuplicate = await client.query(`SELECT COUNT(email) FROM users WHERE email = $1`, [email])
-      console.log(queryDuplicate.rows[0].count)
+      await client.end()
       if (queryDuplicate.rows[0].count === '0') {
         duplicate = false
       } else {
@@ -65,16 +76,16 @@ app.post('/', function(req, res){
         console.log('Acc already exists.')
       } else {
         console.log('Acc does not exist.')
-        // id = uuidv4()
-        // bcrypt.genSalt(saltRounds, (err, salt ) => {
-        //   bcrypt.hash(data.password, salt, (err, hash) => {
-        //     insertUser(data.nickname, data.email, hash, id).then(result => {
-        //       if (result) {
-        //           console.log(`User ${data.nickname} created. ID: ${id} Email: ${data.email} Pass: ${hash}`)
-        //       }
-        //   });
-        //   })
-        // })
+        id = uuidv4()
+        bcrypt.genSalt(saltRounds, (err, salt ) => {
+          bcrypt.hash(data.password, salt, (err, hash) => {
+            insertUser(data.nickname, data.email, hash, id).then(result => {
+              if (result) {
+                  console.log(`User ${data.nickname} created. ID: ${id} Email: ${data.email} Pass: ${hash}`)
+              }
+          });
+          })
+        })
       }
     })
  })
