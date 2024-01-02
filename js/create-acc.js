@@ -19,7 +19,7 @@ const insertUser = async (username, email, pass, id) => {
     user: 'postgres',
     host: 'localhost',
     database: 'users',
-    password: '',
+    password: 'F.aq9173',
     port: '5432'
   })
   
@@ -43,13 +43,13 @@ const validateDuplicate = async (email) => {
     user: 'postgres',
     host: 'localhost',
     database: 'users',
-    password: '',
+    password: 'F.aq9173',
     port: '5432'
   })
 
   try {
       await client.connect()
-      queryDuplicate = await client.query(`SELECT COUNT(email) FROM users WHERE email = $1`, [email])
+      queryDuplicate = await client.query(`SELECT email FROM users WHERE email = $1`, [email])
       await client.end()
       if (queryDuplicate.rows[0].count === '0') {
         duplicate = false
@@ -69,8 +69,22 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 app.use(bodyParser.json());
 
+app.get('/validateDuplicate', (req, res) => {
+  const data = req.body
+
+  validateDuplicate('dom.lepizmo@email.cz').then(result => {
+    if (duplicate === true) {
+      res.json(result)
+    } else {
+      res.json(result)
+    }
+  })
+})
+
 app.post('/', function(req, res){
+
     const data = req.body
+
     validateDuplicate(data.email).then(result => {
       if (duplicate === true) {
         console.log('Acc already exists.')
@@ -83,7 +97,7 @@ app.post('/', function(req, res){
               if (result) {
                   console.log(`User ${data.nickname} created. ID: ${id} Email: ${data.email} Pass: ${hash}`)
               }
-          });
+            })
           })
         })
       }
@@ -91,5 +105,5 @@ app.post('/', function(req, res){
  })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`App listening on port ${port}`)
 })

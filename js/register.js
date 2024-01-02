@@ -78,6 +78,18 @@ elArr.forEach((element) => {
     element.addEventListener('keyup', validateForm)
 })
 
+async function checkDuplicate() {
+    const apiUrl = "http://localhost:3000/validateDuplicate"
+
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json()
+      console.log(data)
+    } catch (error) {
+      console.log(`Error: ${error}`)
+    }
+  }
+
 nickname.addEventListener('change', nicknameHandler)
 nickname.addEventListener('keyup', nicknameHandler)
 email.addEventListener('change', emailHandler)
@@ -90,7 +102,8 @@ iconHide.addEventListener('click', showHide)
 iconShow.addEventListener('click', showHide)
 button.addEventListener('click', (e) =>{
     e.preventDefault()
-    xhttp.open("POST", "http://localhost:3000/", true)
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-    xhttp.send(`nickname=${nickname.value}&email=${email.value}&password=${password.value}`)
+    checkDuplicate()
+    // xhttp.open("POST", "http://localhost:3000/", true)
+    // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    // xhttp.send(`nickname=${nickname.value}&email=${email.value}&password=${password.value}`)
 })
