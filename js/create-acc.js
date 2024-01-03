@@ -2,7 +2,8 @@ const express = require('express')
 const bcrypt = require('bcrypt')
 const bodyParser = require("body-parser")
 const { Client, Pool } = require('pg')
-const { v4: uuidv4,} = require('uuid');
+const { v4: uuidv4,} = require('uuid')
+const cors = require('cors')
 
 const pool = new Pool()
 let queryDuplicate
@@ -67,9 +68,11 @@ const validateDuplicate = async (email) => {
 
 app.use(bodyParser.urlencoded({extended: true}))
 
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 
-app.get('/validateDuplicate', (req, res) => {
+app.use(cors({origin: 'http://localhost:5500'}));
+
+app.get('/validateDuplicate', cors(), (req, res) => {
   const data = req.body
 
   validateDuplicate('dom.lepizmo@email.cz').then(result => {

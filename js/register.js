@@ -11,7 +11,7 @@ let button = document.getElementById('submit')
 let iconHide = document.getElementById('hide')
 let iconShow = document.getElementById('show')
 
-let xhttp = new XMLHttpRequest();
+const xhttp = new XMLHttpRequest();
 
 const emailPattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/gm
@@ -78,17 +78,17 @@ elArr.forEach((element) => {
     element.addEventListener('keyup', validateForm)
 })
 
-async function checkDuplicate() {
-    const apiUrl = "http://localhost:3000/validateDuplicate"
+// async function checkDuplicate() {
+//     const apiUrl = "http://localhost:3000/validateDuplicate"
 
-    try {
-      const response = await fetch(apiUrl);
-      const data = await response.json()
-      console.log(data)
-    } catch (error) {
-      console.log(`Error: ${error}`)
-    }
-  }
+//     try {
+//       const response = await fetch(apiUrl);
+//       const data = await response.json()
+//       console.log(data)
+//     } catch (error) {
+//       console.log(`Error: ${error}`)
+//     }
+//   }
 
 nickname.addEventListener('change', nicknameHandler)
 nickname.addEventListener('keyup', nicknameHandler)
@@ -102,7 +102,15 @@ iconHide.addEventListener('click', showHide)
 iconShow.addEventListener('click', showHide)
 button.addEventListener('click', (e) =>{
     e.preventDefault()
-    checkDuplicate()
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == XMLHttpRequest.DONE) {
+            console.log(xhttp.responseText)
+        }
+    }
+    xhttp.open("GET", "http://localhost:3000/validateDuplicate", true)
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhttp.send(`email=${email.value}`)
+    //checkDuplicate()
     // xhttp.open("POST", "http://localhost:3000/", true)
     // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     // xhttp.send(`nickname=${nickname.value}&email=${email.value}&password=${password.value}`)
