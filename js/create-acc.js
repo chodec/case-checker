@@ -52,7 +52,6 @@ const validateDuplicate = async (email) => {
       await client.connect()
       queryDuplicate = await client.query(`SELECT email FROM users WHERE email = $1`, [email])
       await client.end()
-      console.log(queryDuplicate.rowCount);
       if (queryDuplicate.rowCount >= 1) {
         duplicate = true
       } else if (queryDuplicate.rowCount == 0) {
@@ -68,7 +67,6 @@ const validateDuplicate = async (email) => {
 }
 
 app.use(bodyParser.urlencoded({extended: true}))
-
 app.use(bodyParser.json())
 
 app.use(cors({origin: 'http://localhost:5500'}));
@@ -78,9 +76,7 @@ app.post('/validateDuplicate', cors(), (req, res) => {
 
   validateDuplicate(data.email).then(result => {
     if (duplicate === true) {
-      res.json(queryDuplicate)
-    } else {
-      res.json(queryDuplicate)
+      res.json(queryDuplicate.rows[0].email)
     }
   })
 })
