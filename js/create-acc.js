@@ -55,10 +55,8 @@ const validateDuplicate = async (email) => {
       console.log(queryDuplicate.rowCount);
       if (queryDuplicate.rowCount >= 1) {
         duplicate = true
-        console.log("DUPLICATE TRUE " + duplicate)
       } else if (queryDuplicate.rowCount == 0) {
         duplicate = false
-        console.log("DUPLICATE FALSE " + duplicate)
       }
       return true
   } catch (error) {
@@ -75,15 +73,14 @@ app.use(bodyParser.json())
 
 app.use(cors({origin: 'http://localhost:5500'}));
 
-app.get('/validateDuplicate', cors(), (req, res) => {
+app.post('/validateDuplicate', cors(), (req, res) => {
   const data = req.body
 
   validateDuplicate(data.email).then(result => {
-    console.log(data.email);
     if (duplicate === true) {
-      res.json(result)
+      res.json(queryDuplicate)
     } else {
-      res.json(result)
+      res.json(queryDuplicate)
     }
   })
 })
@@ -91,10 +88,7 @@ app.get('/validateDuplicate', cors(), (req, res) => {
 app.post('/', function(req, res){
     const data = req.body
     validateDuplicate(data.email).then(result => {
-      if (duplicate == true) {
-        console.log('Acc already exists.')
-      } else if (duplicate == false) {
-        console.log('Acc does not exist.')
+      if (duplicate == false) {
         id = uuidv4()
         bcrypt.genSalt(saltRounds, (err, salt ) => {
           bcrypt.hash(data.password, salt, (err, hash) => {
