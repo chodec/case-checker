@@ -107,11 +107,11 @@ button.addEventListener('click', (e) =>{
             console.log(xhttp.responseText)
         }
     }
-    xhttp.open("GET", "http://localhost:3000/validateDuplicate", true)
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-    xhttp.send(`email=${email.value}`)
-    //checkDuplicate()
-    // xhttp.open("POST", "http://localhost:3000/", true)
+    // xhttp.open("GET", "http://localhost:3000/validateDuplicate", true)
     // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-    // xhttp.send(`nickname=${nickname.value}&email=${email.value}&password=${password.value}`)
+    // xhttp.send(`email=${email.value}`)
+    //checkDuplicate()
+    xhttp.open("POST", "http://localhost:3000/", true)
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhttp.send(`nickname=${nickname.value}&email=${email.value}&password=${password.value}`)
 })

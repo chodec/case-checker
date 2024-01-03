@@ -7,7 +7,7 @@ const cors = require('cors')
 
 const pool = new Pool()
 let queryDuplicate
-let duplicate
+let duplicate = true
 
 const app = express()
 const port = 3000
@@ -39,7 +39,7 @@ const insertUser = async (username, email, pass, id) => {
 }
 
 const validateDuplicate = async (email) => {
-
+  console.log(email);
   const client = new Client({
     user: 'postgres',
     host: 'localhost',
@@ -52,10 +52,13 @@ const validateDuplicate = async (email) => {
       await client.connect()
       queryDuplicate = await client.query(`SELECT email FROM users WHERE email = $1`, [email])
       await client.end()
-      if (queryDuplicate.rows[0].count === '0') {
-        duplicate = false
-      } else {
+      console.log(queryDuplicate.rowCount);
+      if (queryDuplicate.rowCount >= 1) {
         duplicate = true
+        console.log("DUPLICATE TRUE " + duplicate)
+      } else if (queryDuplicate.rowCount == 0) {
+        duplicate = false
+        console.log("DUPLICATE FALSE " + duplicate)
       }
       return true
   } catch (error) {
@@ -75,7 +78,8 @@ app.use(cors({origin: 'http://localhost:5500'}));
 app.get('/validateDuplicate', cors(), (req, res) => {
   const data = req.body
 
-  validateDuplicate('dom.lepizmo@email.cz').then(result => {
+  validateDuplicate(data.email).then(result => {
+    console.log(data.email);
     if (duplicate === true) {
       res.json(result)
     } else {
@@ -85,13 +89,11 @@ app.get('/validateDuplicate', cors(), (req, res) => {
 })
 
 app.post('/', function(req, res){
-
     const data = req.body
-
     validateDuplicate(data.email).then(result => {
-      if (duplicate === true) {
+      if (duplicate == true) {
         console.log('Acc already exists.')
-      } else {
+      } else if (duplicate == false) {
         console.log('Acc does not exist.')
         id = uuidv4()
         bcrypt.genSalt(saltRounds, (err, salt ) => {
