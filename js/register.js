@@ -6,10 +6,13 @@ let emailHelp = document.getElementById('emailHelp')
 let passwordHelp = document.getElementById('passwordHelp')
 let nicknameHelp = document.getElementById('nicknameHelp')
 let passwordRepeatHelp = document.getElementById('passwordRepeatHelp')
+let emailDuplicate = document.getElementById('emailDuplicate')
 let elArr = document.querySelectorAll('input')
 let button = document.getElementById('submit')
 let iconHide = document.getElementById('hide')
 let iconShow = document.getElementById('show')
+
+let duplicate = false
 
 const xhttp = new XMLHttpRequest();
 
@@ -28,6 +31,19 @@ const changeBorder =  (dom, domHelper, status) => {
         dom.style.color = "white"
         domHelper.classList.add('hidden')
     }
+}
+
+const emailHandlerDuplicate = (email) => {
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == XMLHttpRequest.DONE) {
+            if (email == xhttp.responseText.substring(1, xhttp.responseText.length - 1)) {
+                console.log('duplicate')
+            }
+        }
+    }
+    xhttp.open("POST", "http://localhost:3000/validateDuplicate", true)
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhttp.send(`email=${email}`)
 }
 const showHide = () => {
     if (iconShow.classList.contains('hidden')) {
@@ -66,29 +82,18 @@ const matchingPasswordHandler = () => {
 
 const validateForm = () => {
     let nicknameLength = nickname.value
-    if (nicknameLength.length > 2 && email.value.match(emailPattern) && password.value.match(passwordPattern) && password.value === passwordRepeat.value){
-        button.disabled = false
-    } else {
-        button.disabled = true
-    }
+
+    nicknameLength.length > 2 && email.value.match(emailPattern) && password.value.match(passwordPattern) && password.value === passwordRepeat.value ?
+        //button.disabled = false 
+        emailHandlerDuplicate(email.value) :
+         button.disabled = true
+    
 }
 
 elArr.forEach((element) => {
     element.addEventListener('change', validateForm)
     element.addEventListener('keyup', validateForm)
 })
-
-// async function checkDuplicate() {
-//     const apiUrl = "http://localhost:3000/validateDuplicate"
-
-//     try {
-//       const response = await fetch(apiUrl);
-//       const data = await response.json()
-//       console.log(data)
-//     } catch (error) {
-//       console.log(`Error: ${error}`)
-//     }
-//   }
 
 nickname.addEventListener('change', nicknameHandler)
 nickname.addEventListener('keyup', nicknameHandler)
@@ -102,16 +107,8 @@ iconHide.addEventListener('click', showHide)
 iconShow.addEventListener('click', showHide)
 button.addEventListener('click', (e) =>{
     e.preventDefault()
-    xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == XMLHttpRequest.DONE) {
-            console.log(xhttp.responseText)
-        }
-    }
-    // xhttp.open("POST", "http://localhost:3000/validateDuplicate", true)
-    // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-    // xhttp.send(`email=${email.value}`)
 
-    xhttp.open("POST", "http://localhost:3000/", true)
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-    xhttp.send(`nickname=${nickname.value}&email=${email.value}&password=${password.value}`)
+    // xhttp.open("POST", "http://localhost:3000/", true)
+    // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    // xhttp.send(`nickname=${nickname.value}&email=${email.value}&password=${password.value}`)
 })

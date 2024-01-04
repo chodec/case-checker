@@ -39,7 +39,6 @@ const insertUser = async (username, email, pass, id) => {
 }
 
 const validateDuplicate = async (email) => {
-  console.log(email);
   const client = new Client({
     user: 'postgres',
     host: 'localhost',
