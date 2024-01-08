@@ -32,11 +32,10 @@ const changeBorder =  (dom, domHelper, status) => {
         domHelper.classList.add('hidden')
     }
 }
-
 const emailHandlerDuplicate = (email) => {
     xhttp.onreadystatechange = function() {
         if (xhttp.readyState == XMLHttpRequest.DONE) {
-            console.log(xhttp.responseText.substring(1, xhttp.responseText.length - 1));
+            console.log(xhttp.responseText.substring(1, xhttp.responseText.length - 1), email)
             email === xhttp.responseText.substring(1, xhttp.responseText.length - 1) ?
                 duplicate = true :
                  duplicate = false
@@ -66,16 +65,12 @@ const nicknameHandler = () => {
 
 //tahle zasrana kokotina nefunguje, validuji se oba errory
 const emailHandler = () => {
-    if(email.value.match(emailPattern)){
-        emailHandlerDuplicate(email.value)
-        if(duplicate === true){
-            changeBorder(email, emailDuplicate, 'failed')
-        } else if(duplicate === false) {
-            changeBorder(email, emailDuplicate, 'passed')
-        }
-    } else {
-        changeBorder(email, emailHelp, 'failed')
-    }
+    changeBorder(email,emailDuplicate, "passed")
+    emailHelp.style.display = "block"
+    emailDuplicate.style.display = "none"
+    email.value.match(emailPattern) ?
+     changeBorder(email, emailHelp, 'passed') :
+      changeBorder(email, emailHelp, 'failed')
 }
 
 const passwordHandler = () => {
@@ -116,7 +111,12 @@ iconHide.addEventListener('click', showHide)
 iconShow.addEventListener('click', showHide)
 button.addEventListener('click', (e) =>{
     e.preventDefault()
-
+    emailHandlerDuplicate(email.value)
+    if (duplicate === false) {
+        changeBorder(email,emailDuplicate, "failed")
+        emailDuplicate.style.display = "table"
+        emailHelp.style.display = "none"
+    }
     // xhttp.open("POST", "http://localhost:3000/", true)
     // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     // xhttp.send(`nickname=${nickname.value}&email=${email.value}&password=${password.value}`)
