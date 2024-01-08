@@ -4,6 +4,7 @@ const bodyParser = require("body-parser")
 const { Client, Pool } = require('pg')
 const { v4: uuidv4,} = require('uuid')
 const cors = require('cors')
+require('dotenv').config()
 
 const pool = new Pool()
 let queryDuplicate
@@ -20,7 +21,7 @@ const insertUser = async (username, email, pass, id) => {
     user: 'postgres',
     host: 'localhost',
     database: 'users',
-    password: 'F.aq9173',
+    password: process.env.DB_PASS,
     port: '5432'
   })
   
@@ -43,7 +44,7 @@ const validateDuplicate = async (email) => {
     user: 'postgres',
     host: 'localhost',
     database: 'users',
-    password: 'F.aq9173',
+    password: process.env.DB_PASS,
     port: '5432'
   })
 

@@ -36,9 +36,10 @@ const changeBorder =  (dom, domHelper, status) => {
 const emailHandlerDuplicate = (email) => {
     xhttp.onreadystatechange = function() {
         if (xhttp.readyState == XMLHttpRequest.DONE) {
-            if (email == xhttp.responseText.substring(1, xhttp.responseText.length - 1)) {
-                console.log('duplicate')
-            }
+            console.log(xhttp.responseText.substring(1, xhttp.responseText.length - 1));
+            email === xhttp.responseText.substring(1, xhttp.responseText.length - 1) ?
+                duplicate = true :
+                 duplicate = false
         }
     }
     xhttp.open("POST", "http://localhost:3000/validateDuplicate", true)
@@ -62,10 +63,19 @@ const nicknameHandler = () => {
      changeBorder(nickname, nicknameHelp, 'passed') :
       changeBorder(nickname, nicknameHelp, 'failed')
 }
+
+//tahle zasrana kokotina nefunguje, validuji se oba errory
 const emailHandler = () => {
-    email.value.match(emailPattern) ?
-     changeBorder(email, emailHelp, 'passed') :
-      changeBorder(email, emailHelp, 'failed')
+    if(email.value.match(emailPattern)){
+        emailHandlerDuplicate(email.value)
+        if(duplicate === true){
+            changeBorder(email, emailDuplicate, 'failed')
+        } else if(duplicate === false) {
+            changeBorder(email, emailDuplicate, 'passed')
+        }
+    } else {
+        changeBorder(email, emailHelp, 'failed')
+    }
 }
 
 const passwordHandler = () => {
@@ -82,12 +92,11 @@ const matchingPasswordHandler = () => {
 
 const validateForm = () => {
     let nicknameLength = nickname.value
-
-    nicknameLength.length > 2 && email.value.match(emailPattern) && password.value.match(passwordPattern) && password.value === passwordRepeat.value ?
-        //button.disabled = false 
-        emailHandlerDuplicate(email.value) :
-         button.disabled = true
-    
+    if(nicknameLength.length > 2 && email.value.match(emailPattern) && password.value.match(passwordPattern) && password.value === passwordRepeat.value){
+        button.disabled = false
+    } else {
+        button.disabled = true
+    }
 }
 
 elArr.forEach((element) => {
