@@ -40,6 +40,7 @@ const emailHandlerDuplicate = (email) => {
                  duplicate = false
         }
     }
+    //Co to kurva je proc to volam 2x
     xhttp.open("POST", "http://localhost:3000/validateDuplicate", true)
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     xhttp.send(`email=${email}`)
