@@ -62,6 +62,9 @@ nav img{
 small{
     color: red!important;
 }
+a{
+    text-decoration: none;
+}
 .header{
     height: 100vh;
     background-color: #161618;
@@ -122,7 +125,9 @@ small{
     margin-left: 6px;
     scale: 1.1;
 }
-
+a:hover{
+    scale: 1.1;
+}
 
 .row-header{
     display: flex;
@@ -154,7 +159,7 @@ input:-webkit-autofill{
     font-size: 1rem;
 }
 .register-border{
-    box-shadow: 0px 0px 85px 10px rgba(228,135,22,0.63);
+    box-shadow: 0px 0px 300px 5px rgba(228,135,22,0.63);
 }
 .register-h1{
     text-align: center;
