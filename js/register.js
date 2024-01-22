@@ -1,16 +1,16 @@
-let email = document.getElementById('email')
-let password = document.getElementById('password')
-let nickname = document.getElementById('nickname')
-let passwordRepeat = document.getElementById('passwordRepeat')
-let emailHelp = document.getElementById('emailHelp')
-let passwordHelp = document.getElementById('passwordHelp')
-let nicknameHelp = document.getElementById('nicknameHelp')
-let passwordRepeatHelp = document.getElementById('passwordRepeatHelp')
-let emailDuplicate = document.getElementById('emailDuplicate')
-let elArr = document.querySelectorAll('input')
-let button = document.getElementById('submit')
-let iconHide = document.getElementById('hide')
-let iconShow = document.getElementById('show')
+const email = document.getElementById('email')
+const password = document.getElementById('password')
+const nickname = document.getElementById('nickname')
+const passwordRepeat = document.getElementById('passwordRepeat')
+const emailHelp = document.getElementById('emailHelp')
+const passwordHelp = document.getElementById('passwordHelp')
+const nicknameHelp = document.getElementById('nicknameHelp')
+const passwordRepeatHelp = document.getElementById('passwordRepeatHelp')
+const emailDuplicate = document.getElementById('emailDuplicate')
+const elArr = document.querySelectorAll('input')
+const button = document.getElementById('submit')
+const iconHide = document.getElementById('hide')
+const iconShow = document.getElementById('show')
 
 let duplicate = false
 
@@ -32,6 +32,7 @@ const changeBorder =  (dom, domHelper, status) => {
         domHelper.classList.add('hidden')
     }
 }
+
 const emailHandlerDuplicate = (email) => {
     xhttp.onreadystatechange = function() {
         if (xhttp.readyState === XMLHttpRequest.DONE) {
