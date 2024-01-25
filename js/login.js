@@ -15,6 +15,20 @@ const xhttp = new XMLHttpRequest()
 
 const urlLogin = 'http://localhost:3000/account/login'
 
+const changeBorder =  (dom, domHelper, status) => {
+    if (status === 'failed') {
+        dom.style.borderColor = "red"
+        dom.style.boxShadow = "0.25rem 0.25rem red"
+        dom.style.color = "white"
+        domHelper.classList.remove('hidden')
+    } else if (status === 'passed') {
+        dom.style.borderColor = "green"
+        dom.style.boxShadow = "0.25rem 0.25rem green"
+        dom.style.color = "white"
+        domHelper.classList.add('hidden')
+    }
+}
+
 const emailHandler = () => {
     email.value.match(emailPattern) ? emailValid = true : emailValid = false
 }
@@ -59,6 +73,12 @@ button.addEventListener('click', (e) =>{
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState === XMLHttpRequest.DONE) {
             console.log(xhttp.response)
+            if (xhttp.response === 'success') {
+                
+            } else {
+                changeBorder(email, emailHelp, 'failed')
+                changeBorder(password, passwordHelp, 'failed')
+            }
         }
     }
     xhttp.open("POST", urlLogin, true)
