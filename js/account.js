@@ -8,6 +8,7 @@ require('dotenv').config()
 
 let queryDuplicate
 let duplicate = true
+let userData = []
 
 const app = express()
 const port = 3000
@@ -37,6 +38,31 @@ const insertUser = async (username, email, pass, id) => {
       await client.end()
   }
 }
+
+const getUser = async (email, pass) => {
+
+  const client = new Client({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'users',
+    password: process.env.DB_PASS,
+    port: '5432'
+  })
+  
+  try {
+      await client.connect()
+      userData = await client.query(
+          `SELECT email, pass FROM users 
+            WHERE email=($1)`, [email])
+      return true
+  } catch (error) {
+      console.error(error.stack)
+      return false
+  } finally {
+      await client.end()
+  }
+}
+
 
 const validateDuplicate = async (email) => {
   const client = new Client({
@@ -80,7 +106,20 @@ app.post('/account/register/validateDuplicate', cors(), (req, res) => {
   })
 })
 
-app.post('/account/register', function(req, res){
+app.post('/account/login', cors(), (req, res) =>{
+  const data = req.body
+  getUser(data.email, data.password).then(result => {
+    bcrypt.compare(data.password, userData.rows[0].pass, (err, res) => {
+      if (res) {
+        console.log('res = true')
+      } else {
+        console.log('res = false');
+      }
+    })
+  })
+})
+
+app.post('/account/register', (req, res) => {
     const data = req.body
     validateDuplicate(data.email).then(result => {
       if (duplicate == false) {

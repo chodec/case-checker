@@ -11,15 +11,16 @@ const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/gm
 let passValid = false
 let emailValid = false
 
+const xhttp = new XMLHttpRequest()
+
+const urlLogin = 'http://localhost:3000/account/login'
 
 const emailHandler = () => {
     email.value.match(emailPattern) ? emailValid = true : emailValid = false
-    console.log(emailValid)
 }
 
 const passwordHandler = () => {
     password.value.match(passwordPattern) ?  passValid = true : passValid = false
-    console.log(passValid)
 }
 
 const showHide = () => {
@@ -55,5 +56,7 @@ iconHide.addEventListener('click', showHide)
 iconShow.addEventListener('click', showHide)
 button.addEventListener('click', (e) =>{
     e.preventDefault()
-
+    xhttp.open("POST", urlLogin, true)
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhttp.send(`email=${email.value}&password=${password.value}`)
 })
