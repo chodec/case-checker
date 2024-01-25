@@ -1,12 +1,11 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const bodyParser = require("body-parser")
-const { Client, Pool } = require('pg')
+const { Client } = require('pg')
 const { v4: uuidv4,} = require('uuid')
 const cors = require('cors')
 require('dotenv').config()
 
-const pool = new Pool()
 let queryDuplicate
 let duplicate = true
 
@@ -71,7 +70,7 @@ app.use(bodyParser.json())
 
 app.use(cors({origin: 'http://localhost:5500'}));
 
-app.post('/validateDuplicate', cors(), (req, res) => {
+app.post('/account/register/validateDuplicate', cors(), (req, res) => {
   const data = req.body
 
   validateDuplicate(data.email).then(result => {
@@ -81,7 +80,7 @@ app.post('/validateDuplicate', cors(), (req, res) => {
   })
 })
 
-app.post('/', function(req, res){
+app.post('/account/register', function(req, res){
     const data = req.body
     validateDuplicate(data.email).then(result => {
       if (duplicate == false) {

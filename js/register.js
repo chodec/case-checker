@@ -19,6 +19,9 @@ const xhttp = new XMLHttpRequest();
 const emailPattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/gm
 
+const urlValidate = "http://localhost:3000/account/register/validateDuplicate"
+const urlRegister = "http://localhost:3000/account/register"
+
 const changeBorder =  (dom, domHelper, status) => {
     if (status === 'failed') {
         dom.style.borderColor = "red"
@@ -41,7 +44,7 @@ const emailHandlerDuplicate = (email) => {
                  duplicate = false
         }
     }
-    xhttp.open("POST", "http://localhost:3000/validateDuplicate", true)
+    xhttp.open("POST", urlValidate, true)
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     xhttp.send(`email=${email}`)
 }
@@ -120,7 +123,7 @@ button.addEventListener('click', (e) =>{
             duplicate = false
         } 
         else if (duplicate === false) {     
-            xhttp.open("POST", "http://localhost:3000/", true)
+            xhttp.open("POST", urlRegister, true)
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
             xhttp.send(`nickname=${nickname.value}&email=${email.value}&password=${password.value}`)
         }

@@ -53,3 +53,7 @@ password.addEventListener('change', passwordHandler)
 password.addEventListener('keyup', passwordHandler)
 iconHide.addEventListener('click', showHide)
 iconShow.addEventListener('click', showHide)
+button.addEventListener('click', (e) =>{
+    e.preventDefault()
+
+})
