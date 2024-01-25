@@ -37,7 +37,7 @@ const changeBorder =  (dom, domHelper, status) => {
 }
 
 const emailHandlerDuplicate = (email) => {
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = () => {
         if (xhttp.readyState === XMLHttpRequest.DONE) {
             email === xhttp.responseText.substring(1, xhttp.responseText.length - 1) ?
                 duplicate = true :

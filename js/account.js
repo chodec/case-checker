@@ -108,13 +108,15 @@ app.post('/account/register/validateDuplicate', cors(), (req, res) => {
 
 app.post('/account/login', cors(), (req, res) =>{
   const data = req.body
+  let userJson = {email: data.email, login: ''}
   getUser(data.email, data.password).then(result => {
-    bcrypt.compare(data.password, userData.rows[0].pass, (err, res) => {
-      if (res) {
-        console.log('res = true')
+    bcrypt.compare(data.password, userData.rows[0].pass, (error, resonse) => {
+      if (resonse) {
+        userJson.login = 'success'
       } else {
-        console.log('res = false');
+        userJson.login = 'failed'
       }
+      res.json(userJson)
     })
   })
 })

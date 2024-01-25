@@ -56,6 +56,11 @@ iconHide.addEventListener('click', showHide)
 iconShow.addEventListener('click', showHide)
 button.addEventListener('click', (e) =>{
     e.preventDefault()
+    xhttp.onreadystatechange = () => {
+        if (xhttp.readyState === XMLHttpRequest.DONE) {
+            console.log(xhttp.response)
+        }
+    }
     xhttp.open("POST", urlLogin, true)
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     xhttp.send(`email=${email.value}&password=${password.value}`)
