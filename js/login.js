@@ -72,10 +72,9 @@ button.addEventListener('click', (e) =>{
     e.preventDefault()
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState === XMLHttpRequest.DONE) {
-            console.log(xhttp.response)
-            if (xhttp.response === 'success') {
+            if (xhttp.responseText.substring(1, xhttp.responseText.length - 1) === "success") {
                 
-            } else {
+            } else if(xhttp.responseText.substring(1, xhttp.responseText.length - 1) === "failed"){
                 changeBorder(email, emailHelp, 'failed')
                 changeBorder(password, passwordHelp, 'failed')
             }
