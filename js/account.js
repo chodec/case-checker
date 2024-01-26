@@ -4,6 +4,10 @@ const bodyParser = require("body-parser")
 const { Client } = require('pg')
 const { v4: uuidv4,} = require('uuid')
 const cors = require('cors')
+const session = require('express-session')
+const passport = require('passport')
+const { Strategy } = require('passport-local')
+const cookieParser = require('cookie-parser')
 require('dotenv').config()
 
 let queryDuplicate
@@ -15,8 +19,22 @@ const port = 3000
 
 const saltRounds = 10
 
-const insertUser = async (username, email, pass, id) => {
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+app.use(cookieParser())
 
+const makeCookie = () => {
+  const cookie = new session.Cookie()
+  cookie.maxAge = 10000 
+  cookie.secure = true
+  cookie.domain = 'http://127.0.0.1:3000/'
+
+  return cookie
+}
+
+app.use(cors({origin: 'http://localhost:5500'}));
+
+const insertUser = async (username, email, pass, id) => {
   const client = new Client({
     user: 'postgres',
     host: 'localhost',
@@ -24,7 +42,6 @@ const insertUser = async (username, email, pass, id) => {
     password: process.env.DB_PASS,
     port: '5432'
   })
-  
   try {
       await client.connect()
       await client.query(
@@ -40,7 +57,6 @@ const insertUser = async (username, email, pass, id) => {
 }
 
 const getUser = async (email, pass) => {
-
   const client = new Client({
     user: 'postgres',
     host: 'localhost',
@@ -48,7 +64,6 @@ const getUser = async (email, pass) => {
     password: process.env.DB_PASS,
     port: '5432'
   })
-  
   try {
       await client.connect()
       userData = await client.query(
@@ -72,7 +87,6 @@ const validateDuplicate = async (email) => {
     password: process.env.DB_PASS,
     port: '5432'
   })
-
   try {
       await client.connect()
       queryDuplicate = await client.query(`SELECT email FROM users WHERE email = $1`, [email])
@@ -91,14 +105,8 @@ const validateDuplicate = async (email) => {
   }
 }
 
-app.use(bodyParser.urlencoded({extended: true}))
-app.use(bodyParser.json())
-
-app.use(cors({origin: 'http://localhost:5500'}));
-
 app.post('/account/register/validateDuplicate', cors(), (req, res) => {
   const data = req.body
-
   validateDuplicate(data.email).then(result => {
     if (duplicate === true) {
       res.json(queryDuplicate.rows[0].email)
@@ -111,8 +119,15 @@ app.post('/account/login', cors(), (req, res) =>{
   let userState = ''
   getUser(data.email, data.password).then(result => {
     bcrypt.compare(data.password, userData.rows[0].pass, (error, response) => {
-      response ? userState = 'success' : userState = 'failed'
-      res.json(userState)
+      if(response) {
+        const sessionId = uuidv4()
+        makeCookie()
+        userState = 'success'
+      } else {
+        userState = 'failed'
+      }
+      //res.json(userState)
+      console.log(`User ${data.email} has ${userState} log in.`)
     })
   })
 })
@@ -133,6 +148,10 @@ app.post('/account/register', (req, res) => {
         })
       }
     })
+ })
+
+ app.get('/', (req,res) => {
+  res.cookie("kokot").send("megakokot")
  })
 
 app.listen(port, () => {
