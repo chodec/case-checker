@@ -21,16 +21,24 @@ const saltRounds = 10
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
+
+app.set('trust proxy', 1)
+app.use(session({
+  genid: (req) => {
+    return  uuidv4()
+  },
+  secret: "key",
+  saveUninitialized:true,
+  cookie:{
+    secure:true, 
+    httpOnly:false,
+    maxAge:60000 * 60 * 24 * 28
+  } ,
+  resave: false
+}));
+
+
 app.use(cookieParser())
-
-const makeCookie = () => {
-  const cookie = new session.Cookie()
-  cookie.maxAge = 10000 
-  cookie.secure = true
-  cookie.domain = 'http://127.0.0.1:3000/'
-
-  return cookie
-}
 
 app.use(cors({origin: 'http://localhost:5500'}));
 
@@ -120,13 +128,13 @@ app.post('/account/login', cors(), (req, res) =>{
   getUser(data.email, data.password).then(result => {
     bcrypt.compare(data.password, userData.rows[0].pass, (error, response) => {
       if(response) {
-        const sessionId = uuidv4()
-        makeCookie()
         userState = 'success'
+        req.session.user = data.email
       } else {
         userState = 'failed'
       }
-      //res.json(userState)
+      res.json(userState)
+      console.log(req.session)
       console.log(`User ${data.email} has ${userState} log in.`)
     })
   })
@@ -148,10 +156,6 @@ app.post('/account/register', (req, res) => {
         })
       }
     })
- })
-
- app.get('/', (req,res) => {
-  res.cookie("kokot").send("megakokot")
  })
 
 app.listen(port, () => {
