@@ -5,8 +5,6 @@ const { Client } = require('pg')
 const { v4: uuidv4,} = require('uuid')
 const cors = require('cors')
 const session = require('express-session')
-const passport = require('passport')
-const { Strategy } = require('passport-local')
 const cookieParser = require('cookie-parser')
 require('dotenv').config()
 
@@ -27,7 +25,7 @@ app.use(session({
   genid: (req) => {
     return  uuidv4()
   },
-  secret: "key",
+  secret: process.env.SESSION_SECRET,
   saveUninitialized:true,
   cookie:{
     secure:true, 
@@ -40,7 +38,10 @@ app.use(session({
 
 app.use(cookieParser())
 
-app.use(cors({origin: 'http://localhost:5500'}));
+app.use(cors({
+  origin: 'http://localhost:5500',
+  credentials: true
+}));
 
 const insertUser = async (username, email, pass, id) => {
   const client = new Client({
@@ -129,11 +130,12 @@ app.post('/account/login', cors(), (req, res) =>{
     bcrypt.compare(data.password, userData.rows[0].pass, (error, response) => {
       if(response) {
         userState = 'success'
-        req.session.user = data.email
+        //req.session.user = data.email
+        res.cookie('user', data.email, { maxAge: 900000, httpOnly: true })
       } else {
         userState = 'failed'
       }
-      res.json(userState)
+      //res.json(userState)
       console.log(req.session)
       console.log(`User ${data.email} has ${userState} log in.`)
     })
@@ -157,6 +159,17 @@ app.post('/account/register', (req, res) => {
       }
     })
  })
+
+app.get('/profile', cors(),function(req, res, next) {
+  const user = req.cookies.user;
+  res.cookie('user', 'data.email', { maxAge: 900000, httpOnly: true })
+
+    if (user) {
+        res.send(`Welcome back, ${user}!`);
+    } else {
+        res.send('You are not logged in.');
+    }
+})
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
