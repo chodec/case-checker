@@ -4,8 +4,9 @@ const bodyParser = require("body-parser")
 const { Client } = require('pg')
 const { v4: uuidv4,} = require('uuid')
 const cors = require('cors')
+const axios = require('axios')
 const session = require('express-session')
-const cookieParser = require('cookie-parser')
+const { createProxyMiddleware  } = require('http-proxy-middleware')
 require('dotenv').config()
 
 let queryDuplicate
@@ -17,31 +18,39 @@ const port = 3000
 
 const saltRounds = 10
 
+const proxyMiddleware = createProxyMiddleware ({
+  target: 'http://127.0.0.1:5500', 
+  changeOrigin: true, 
+})
+
+app.use(cors())
+
+app.use('/account/login', proxyMiddleware)
+
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-app.set('trust proxy', 1)
 app.use(session({
   genid: (req) => {
     return  uuidv4()
   },
   secret: process.env.SESSION_SECRET,
-  saveUninitialized:true,
-  cookie:{
-    secure:true, 
-    httpOnly:false,
-    maxAge:60000 * 60 * 24 * 28
-  } ,
-  resave: false
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    secure: true, 
+    maxAge: 60000 * 60 * 24 * 28
+  }
 }));
 
-
-app.use(cookieParser())
-
-app.use(cors({
-  origin: 'http://localhost:5500',
-  credentials: true
-}));
+const requireAuth = (req, res, next) => {
+  console.log(req.session.user)
+  if (req.session.user) {
+      next()
+  } else {
+      res.redirect('/login')
+  }
+}
 
 const insertUser = async (username, email, pass, id) => {
   const client = new Client({
@@ -114,7 +123,7 @@ const validateDuplicate = async (email) => {
   }
 }
 
-app.post('/account/register/validateDuplicate', cors(), (req, res) => {
+app.post('/account/register/validateDuplicate', (req, res) => {
   const data = req.body
   validateDuplicate(data.email).then(result => {
     if (duplicate === true) {
@@ -123,23 +132,27 @@ app.post('/account/register/validateDuplicate', cors(), (req, res) => {
   })
 })
 
-app.post('/account/login', cors(), (req, res) =>{
+app.post('/account/login', (req, res) =>{
   const data = req.body
   let userState = ''
   getUser(data.email, data.password).then(result => {
     bcrypt.compare(data.password, userData.rows[0].pass, (error, response) => {
-      if(response) {
-        userState = 'success'
-        //req.session.user = data.email
-        res.cookie('user', data.email, { maxAge: 900000, httpOnly: true })
-      } else {
-        userState = 'failed'
-      }
-      //res.json(userState)
+      response ? userState = 'success' : userState = 'failed'
+      req.session.user = data.email
       console.log(req.session)
-      console.log(`User ${data.email} has ${userState} log in.`)
+      req.session.isAuth = true
+      //res.redirect('/dashboard')
+      //res.json(userState)
     })
   })
+})
+
+app.get('/dashboard', requireAuth, (req, res) => {
+  // Render the dashboard page
+})
+
+app.get('/login', (req, res) => {
+  // Render the dashboard page
 })
 
 app.post('/account/register', (req, res) => {
@@ -159,17 +172,6 @@ app.post('/account/register', (req, res) => {
       }
     })
  })
-
-app.get('/profile', cors(),function(req, res, next) {
-  const user = req.cookies.user;
-  res.cookie('user', 'data.email', { maxAge: 900000, httpOnly: true })
-
-    if (user) {
-        res.send(`Welcome back, ${user}!`);
-    } else {
-        res.send('You are not logged in.');
-    }
-})
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)

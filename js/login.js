@@ -14,6 +14,7 @@ let emailValid = false
 const xhttp = new XMLHttpRequest()
 
 const urlLogin = 'http://localhost:3000/account/login'
+const urlSetSession = 'http://localhost:3000/account/session'
 
 const changeBorder =  (dom, domHelper, status) => {
     if (status === 'failed') {
@@ -73,7 +74,10 @@ button.addEventListener('click', (e) =>{
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState === XMLHttpRequest.DONE) {
             if (xhttp.responseText.substring(1, xhttp.responseText.length - 1) === "success") {
-                
+                // xhttp.open("GET", urlSetSession, true)
+                // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                // xhttp.withCredentials = true
+                // xhttp.send(`email=${email.value}`)
             } else if(xhttp.responseText.substring(1, xhttp.responseText.length - 1) === "failed"){
                 changeBorder(email, emailHelp, 'failed')
                 changeBorder(password, passwordHelp, 'failed')
@@ -82,5 +86,6 @@ button.addEventListener('click', (e) =>{
     }
     xhttp.open("POST", urlLogin, true)
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhttp.withCredentials = true
     xhttp.send(`email=${email.value}&password=${password.value}`)
 })
