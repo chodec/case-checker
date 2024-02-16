@@ -6,7 +6,7 @@ const { v4: uuidv4,} = require('uuid')
 const cors = require('cors')
 const axios = require('axios')
 const session = require('express-session')
-const { createProxyMiddleware  } = require('http-proxy-middleware')
+const fs = require('fs')
 require('dotenv').config()
 
 let queryDuplicate
@@ -18,14 +18,7 @@ const port = 3000
 
 const saltRounds = 10
 
-const proxyMiddleware = createProxyMiddleware ({
-  target: 'http://127.0.0.1:5500', 
-  changeOrigin: true, 
-})
-
 app.use(cors())
-
-app.use('/account/login', proxyMiddleware)
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
@@ -151,8 +144,12 @@ app.get('/dashboard', requireAuth, (req, res) => {
   // Render the dashboard page
 })
 
-app.get('/login', (req, res) => {
-  // Render the dashboard page
+app.get('/', (req, res) => {
+  fs.readFile('C:/Users/DomLe/OneDrive/Plocha/case-checker/index.html', (error, html) => {
+    if (error) {
+      throw error
+    }
+  })
 })
 
 app.post('/account/register', (req, res) => {
