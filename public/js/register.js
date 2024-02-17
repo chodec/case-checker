@@ -68,7 +68,6 @@ const nicknameHandler = () => {
 
 const emailHandler = () => {
     changeBorder(email,emailDuplicate, "passed")
-    emailHelp.style.display = "block"
     emailDuplicate.style.display = "none"
     email.value.match(emailPattern) ?
      changeBorder(email, emailHelp, 'passed') :
