@@ -25,6 +25,8 @@ app.use(cors())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
+app.use(express.static(fePath + '/public'));
+
 app.use(session({
   genid: (req) => {
     return  uuidv4()
@@ -148,6 +150,14 @@ app.get('/dashboard', requireAuth, (req, res) => {
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(fePath,'index.html'))
+})
+
+app.get('/login.html', (req, res) => {
+  res.sendFile(path.join(fePath,'login.html'))
+})
+
+app.get('/register.html', (req, res) => {
+  res.sendFile(path.join(fePath,'register.html'))
 })
 
 app.post('/account/register', (req, res) => {
