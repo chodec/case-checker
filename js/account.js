@@ -1,12 +1,12 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
-const bodyParser = require("body-parser")
+const bodyParser = require('body-parser')
 const { Client } = require('pg')
 const { v4: uuidv4,} = require('uuid')
 const cors = require('cors')
 const axios = require('axios')
 const session = require('express-session')
-const fs = require('fs')
+const path = require('path')
 require('dotenv').config()
 
 let queryDuplicate
@@ -17,6 +17,8 @@ const app = express()
 const port = 3000
 
 const saltRounds = 10
+
+let fePath = path.join(__dirname, '../');
 
 app.use(cors())
 
@@ -145,11 +147,7 @@ app.get('/dashboard', requireAuth, (req, res) => {
 })
 
 app.get('/', (req, res) => {
-  fs.readFile('C:/Users/DomLe/OneDrive/Plocha/case-checker/index.html', (error, html) => {
-    if (error) {
-      throw error
-    }
-  })
+  res.sendFile(path.join(fePath,'index.html'))
 })
 
 app.post('/account/register', (req, res) => {
