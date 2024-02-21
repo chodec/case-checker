@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt')
 const bodyParser = require('body-parser')
 const { Client } = require('pg')
 const { v4: uuidv4,} = require('uuid')
-const cors = require('cors')
 const session = require('express-session')
 const path = require('path')
 require('dotenv').config()
@@ -18,8 +17,6 @@ const port = 3000
 const saltRounds = 10
 
 let fePath = path.join(__dirname, '../');
-
-app.use(cors())
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
@@ -128,37 +125,6 @@ app.post('/account/register/validateDuplicate', (req, res) => {
   })
 })
 
-app.post('/account/login', (req, res) =>{
-  const data = req.body
-  let userState = ''
-  getUser(data.email, data.password).then(result => {
-    bcrypt.compare(data.password, userData.rows[0].pass, (error, response) => {
-      response ? userState = 'success' : userState = 'failed'
-      req.session.user = data.email
-      console.log(req.session)
-      req.session.isAuth = true
-      //res.redirect('/dashboard')
-      //res.json(userState)
-    })
-  })
-})
-
-app.get('/dashboard', requireAuth, (req, res) => {
-  // Render the dashboard page
-})
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(fePath,'index.html'))
-})
-
-app.get('/login.html', (req, res) => {
-  res.sendFile(path.join(fePath,'login.html'))
-})
-
-app.get('/register.html', (req, res) => {
-  res.sendFile(path.join(fePath,'register.html'))
-})
-
 app.post('/account/register', (req, res) => {
     const data = req.body
     validateDuplicate(data.email).then(result => {
@@ -176,6 +142,38 @@ app.post('/account/register', (req, res) => {
       }
     })
  })
+
+ app.post('/account/login', (req, res) =>{
+  const data = req.body
+  getUser(data.email, data.password).then(result => {
+    bcrypt.compare(data.password, userData.rows[0].pass, (error) => {
+      req.session.user = data.email
+      req.session.isAuth = true
+      req.session.save(function (err) {
+        if (err) return next(err)
+        res.json(200)
+      })
+      //res.redirect('/dashboard')
+      //res.json(userState)
+    })
+  })
+})
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(fePath,'index.html'))
+})
+
+app.get('/login.html', (req, res) => {
+  res.sendFile(path.join(fePath,'login.html'))
+})
+
+app.get('/register.html', (req, res) => {
+  res.sendFile(path.join(fePath,'register.html'))
+})
+
+app.get('/dashboard.html', (req, res) => {
+  res.sendFile(path.join(fePath,'dashboard.html'))
+})
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
