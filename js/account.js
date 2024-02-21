@@ -146,15 +146,17 @@ app.post('/account/register', (req, res) => {
  app.post('/account/login', (req, res) =>{
   const data = req.body
   getUser(data.email, data.password).then(result => {
-    bcrypt.compare(data.password, userData.rows[0].pass, (error) => {
-      req.session.user = data.email
-      req.session.isAuth = true
-      req.session.save(function (err) {
-        if (err) return next(err)
-        res.json(200)
-      })
-      //res.redirect('/dashboard')
-      //res.json(userState)
+    bcrypt.compare(data.password, userData.rows[0].pass, (error, result) => {
+      if(result){
+        req.session.user = data.email
+        req.session.isAuth = true
+        req.session.save( (err) => {
+          if (err) return next(err)
+          res.json(200)
+        })
+      } else {
+        res.json(400)
+      }
     })
   })
 })
@@ -172,6 +174,7 @@ app.get('/register.html', (req, res) => {
 })
 
 app.get('/dashboard.html', (req, res) => {
+  console.log()
   res.sendFile(path.join(fePath,'dashboard.html'))
 })
 
