@@ -32,16 +32,17 @@ app.use(session({
   saveUninitialized: true,
   cookie: {
     secure: true, 
-    maxAge: 60000 * 60 * 24 * 28
+    maxAge: 60000 * 60 * 24 * 28,
+    sameSite: "lax"
   }
-}));
+}))
 
 const requireAuth = (req, res, next) => {
   console.log(req.session.user)
   if (req.session.user) {
       next()
   } else {
-      res.redirect('/login')
+      res.sendFile(path.join(fePath,'login.html'))
   }
 }
 
@@ -119,8 +120,10 @@ const validateDuplicate = async (email) => {
 app.post('/account/register/validateDuplicate', (req, res) => {
   const data = req.body
   validateDuplicate(data.email).then(result => {
-    if (duplicate === true) {
-      res.json(queryDuplicate.rows[0].email)
+    if (duplicate === false) {
+      res.json(200)
+    } else {
+      res.json(400)
     }
   })
 })
@@ -146,13 +149,16 @@ app.post('/account/register', (req, res) => {
  app.post('/account/login', (req, res) =>{
   const data = req.body
   getUser(data.email, data.password).then(result => {
-    bcrypt.compare(data.password, userData.rows[0].pass, (error, result) => {
+    bcrypt.compare(data.password, userData.rows[0].pass, (err, result) => {
       if(result){
-        req.session.user = data.email
-        req.session.isAuth = true
-        req.session.save( (err) => {
-          if (err) return next(err)
-          res.json(200)
+        req.session.regenerate(function (err) {
+          if (err) next(err)
+          req.session.user = data.email
+          console.log(req.session)
+          req.session.save( (err) => {
+            if (err) return next(err)
+            res.json(200)
+          })
         })
       } else {
         res.json(400)
@@ -173,8 +179,8 @@ app.get('/register.html', (req, res) => {
   res.sendFile(path.join(fePath,'register.html'))
 })
 
-app.get('/dashboard.html', (req, res) => {
-  console.log()
+app.get('/dashboard.html', requireAuth, (req, res) => {
+  console.log(req.session.user)
   res.sendFile(path.join(fePath,'dashboard.html'))
 })
 

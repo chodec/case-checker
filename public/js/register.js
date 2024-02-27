@@ -37,16 +37,28 @@ const changeBorder =  (dom, domHelper, status) => {
 }
 
 const emailHandlerDuplicate = (email) => {
-    xhttp.onreadystatechange = () => {
-        if (xhttp.readyState === XMLHttpRequest.DONE) {
-            email === xhttp.responseText.substring(1, xhttp.responseText.length - 1) ?
-                duplicate = true :
-                 duplicate = false
-        }
-    }
-    xhttp.open("POST", urlValidate, true)
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-    xhttp.send(`email=${email}`)
+    fetch(urlValidate, {
+        method: "POST",
+        body: new URLSearchParams({
+          email: email
+        }),
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded"
+        },
+        credentials: "include"
+        })
+        .then((res) => {
+            if (res.status !== 200) {
+              throw "failed"
+            }
+            return res.json()
+          })
+          .then((data) => {
+            data === 200 ? duplicate = false : duplicate = true
+            console.log(duplicate);
+          })
+          .catch(() => {
+          })
 }
 const showHide = () => {
     if (iconShow.classList.contains('hidden')) {
@@ -122,9 +134,26 @@ button.addEventListener('click', (e) =>{
             duplicate = false
         } 
         else if (duplicate === false) {     
-            xhttp.open("POST", urlRegister, true)
-            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-            xhttp.send(`nickname=${nickname.value}&email=${email.value}&password=${password.value}`)
+            fetch(urlRegister, {
+                method: "POST",
+                body: new URLSearchParams({
+                  nickname: nickname.value,
+                  email: email.value,
+                  password: password.value
+                }),
+                headers: {
+                  "Content-type": "application/x-www-form-urlencoded"
+                },
+                credentials: "include"
+                })
+                .then((res) => {
+                    if (res.status !== 200) {
+                      throw "failed"
+                    }
+                    return res.json()
+                  })
+                  .catch(() => {
+                  })
         }
     },500)
 })

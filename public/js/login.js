@@ -70,18 +70,32 @@ iconHide.addEventListener('click', showHide)
 iconShow.addEventListener('click', showHide)
 button.addEventListener('click', (e) =>{
     e.preventDefault()
-    xhttp.onreadystatechange = () => {
-        if (xhttp.readyState === XMLHttpRequest.DONE) {
-            if (xhttp.responseText === '200') {
-                window.location.href = 'http://localhost:3000/dashboard.html'
-            } else {
-                changeBorder(email, emailHelp, 'failed')
-                changeBorder(password, passwordHelp, 'failed')
-            }
+    fetch(urlLogin, {
+        method: "POST",
+        body: new URLSearchParams({
+          email: email.value,
+          password: password.value
+        }),
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded"
+        },
+        credentials: "include"
+        })
+      .then((res) => {
+        if (res.status === 200) {
+            if (res.status !== 200) {
+                throw "failed"
+              }
+              return res.json()
         }
-    }
-    xhttp.open("POST", urlLogin, true)
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-    xhttp.withCredentials = true
-    xhttp.send(`email=${email.value}&password=${password.value}`)
+        throw "failed"
+      })
+      .then((data) => {
+        console.log(data)
+        //window.location.href = 'http://localhost:3000/dashboard.html'
+      })
+      .catch(() => {
+        changeBorder(email, emailHelp, 'failed')
+        changeBorder(password, passwordHelp, 'failed')
+      })
 })
