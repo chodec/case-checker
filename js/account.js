@@ -16,12 +16,12 @@ const port = 3000
 
 const saltRounds = 10
 
-let fePath = path.join(__dirname, '../');
+let fePath = path.join(__dirname, '../')
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-app.use(express.static(fePath + '/public'));
+app.use(express.static(fePath + '/public'))
 
 app.use(session({
   genid: (req) => {
@@ -32,8 +32,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: {
     secure: true, 
-    maxAge: 60000 * 60 * 24 * 28,
-    sameSite: "lax"
+    maxAge: 60000 * 60 * 24 * 28
   }
 }))
 
@@ -44,6 +43,28 @@ const requireAuth = (req, res, next) => {
   } else {
       res.sendFile(path.join(fePath,'login.html'))
   }
+}
+
+const saveSess = async (sid, sess, expire) => {
+  const client = new Client({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'users',
+    password: process.env.DB_PASS,
+    port: '5432'
+  })
+  try {
+    await client.connect()
+    await client.query(
+        `INSERT INTO user_sessions (sid, sess, expire) 
+         VALUES ($1, $2, $3)`, [sid, sess, expire])
+    return true
+} catch (error) {
+    console.error(error.stack)
+    return false
+} finally {
+    await client.end()
+}
 }
 
 const insertUser = async (username, email, pass, id) => {
@@ -68,7 +89,7 @@ const insertUser = async (username, email, pass, id) => {
   }
 }
 
-const getUser = async (email, pass) => {
+const getUser = async (email) => {
   const client = new Client({
     user: 'postgres',
     host: 'localhost',
@@ -79,7 +100,7 @@ const getUser = async (email, pass) => {
   try {
       await client.connect()
       userData = await client.query(
-          `SELECT email, pass FROM users 
+          `SELECT email, pass, id FROM users 
             WHERE email=($1)`, [email])
       return true
   } catch (error) {
@@ -154,7 +175,7 @@ app.post('/account/register', (req, res) => {
         req.session.regenerate(function (err) {
           if (err) next(err)
           req.session.user = data.email
-          console.log(req.session)
+          saveSess(userData.rows[0].id, req.session, req.session.cookie._expires)
           req.session.save( (err) => {
             if (err) return next(err)
             res.json(200)

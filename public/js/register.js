@@ -55,9 +55,9 @@ const emailHandlerDuplicate = (email) => {
           })
           .then((data) => {
             data === 200 ? duplicate = false : duplicate = true
-            console.log(duplicate);
           })
           .catch(() => {
+            //for errs
           })
 }
 const showHide = () => {
@@ -153,6 +153,7 @@ button.addEventListener('click', (e) =>{
                     return res.json()
                   })
                   .catch(() => {
+                    //for errs
                   })
         }
     },500)

@@ -91,7 +91,6 @@ button.addEventListener('click', (e) =>{
         throw "failed"
       })
       .then((data) => {
-        console.log(data)
         //window.location.href = 'http://localhost:3000/dashboard.html'
       })
       .catch(() => {
