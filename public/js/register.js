@@ -22,6 +22,7 @@ const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/gm
 const urlValidate = "http://localhost:3000/account/register/validateDuplicate"
 const urlRegister = "http://localhost:3000/account/register"
 
+//Change input CSS if fail or success
 const changeBorder =  (dom, domHelper, status) => {
     if (status === 'failed') {
         dom.style.borderColor = "red"
@@ -36,6 +37,7 @@ const changeBorder =  (dom, domHelper, status) => {
     }
 }
 
+//Check if account with this email already exists
 const emailHandlerDuplicate = (email) => {
     fetch(urlValidate, {
         method: "POST",
@@ -60,6 +62,8 @@ const emailHandlerDuplicate = (email) => {
             //for errs
           })
 }
+
+//Show or Hide users given password
 const showHide = () => {
     if (iconShow.classList.contains('hidden')) {
         iconHide.classList.add('hidden')
@@ -71,6 +75,7 @@ const showHide = () => {
         password.type = 'password'
     }
 }
+//Check if users nickname has right pattern
 const nicknameHandler = () => {
     let nicknameLength = nickname.value
     nicknameLength.length > 2 ?
@@ -78,6 +83,7 @@ const nicknameHandler = () => {
       changeBorder(nickname, nicknameHelp, 'failed')
 }
 
+//Check if email has right pattern and check for duplicates
 const emailHandler = () => {
     changeBorder(email,emailDuplicate, "passed")
     emailDuplicate.style.display = "none"
@@ -86,18 +92,20 @@ const emailHandler = () => {
       changeBorder(email, emailHelp, 'failed')
 }
 
+//Check if password has right pattern
 const passwordHandler = () => {
     password.value.match(passwordPattern) ?
      changeBorder(password, passwordHelp, 'passed') :
       changeBorder(password, passwordHelp, 'failed')
 }
-
+//Check if password is matching
 const matchingPasswordHandler = () => {
     password.value === passwordRepeat.value ?
      changeBorder(passwordRepeat, passwordRepeatHelp, 'passed') :
       changeBorder(passwordRepeat, passwordRepeatHelp, 'failed')
 }
 
+//Check if user fill every input value
 const validateForm = () => {
     let nicknameLength = nickname.value
     if(nicknameLength.length > 2 && email.value.match(emailPattern) && password.value.match(passwordPattern) && password.value === passwordRepeat.value){
@@ -106,7 +114,7 @@ const validateForm = () => {
         button.disabled = true
     }
 }
-
+//Check if user fill every input value
 elArr.forEach((element) => {
     element.addEventListener('change', validateForm)
     element.addEventListener('keyup', validateForm)

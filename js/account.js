@@ -23,6 +23,8 @@ app.use(bodyParser.json())
 
 app.use(express.static(fePath + '/public'))
 
+
+//Setup session for DB
 app.use(session({
   genid: (req) => {
     return  uuidv4()
@@ -36,6 +38,7 @@ app.use(session({
   }
 }))
 
+//Check user session
 const requireAuth = (req, res, next) => {
   console.log(req.session.user)
   if (req.session.user) {
@@ -45,6 +48,7 @@ const requireAuth = (req, res, next) => {
   }
 }
 
+//save session to the DB
 const saveSess = async (sid, sess, expire) => {
   const client = new Client({
     user: 'postgres',
@@ -67,6 +71,7 @@ const saveSess = async (sid, sess, expire) => {
 }
 }
 
+//Create user
 const insertUser = async (username, email, pass, id) => {
   const client = new Client({
     user: 'postgres',
@@ -89,6 +94,7 @@ const insertUser = async (username, email, pass, id) => {
   }
 }
 
+//Get users email from DB
 const getUser = async (email) => {
   const client = new Client({
     user: 'postgres',
@@ -111,7 +117,7 @@ const getUser = async (email) => {
   }
 }
 
-
+//Check if users email already exists in DB
 const validateDuplicate = async (email) => {
   const client = new Client({
     user: 'postgres',
@@ -138,6 +144,7 @@ const validateDuplicate = async (email) => {
   }
 }
 
+//Validate users email, if duplicate send 400 error to user
 app.post('/account/register/validateDuplicate', (req, res) => {
   const data = req.body
   validateDuplicate(data.email).then(result => {
@@ -149,6 +156,7 @@ app.post('/account/register/validateDuplicate', (req, res) => {
   })
 })
 
+//Create user and insert him into DB with secure password
 app.post('/account/register', (req, res) => {
     const data = req.body
     validateDuplicate(data.email).then(result => {
@@ -167,6 +175,7 @@ app.post('/account/register', (req, res) => {
     })
  })
 
+ //Check if user inserts right data then insert session into DB
  app.post('/account/login', (req, res) =>{
   const data = req.body
   getUser(data.email, data.password).then(result => {

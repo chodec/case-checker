@@ -15,6 +15,7 @@ const xhttp = new XMLHttpRequest()
 
 const urlLogin = 'http://localhost:3000/account/login'
 
+//Change input CSS if fail or success
 const changeBorder =  (dom, domHelper, status) => {
     if (status === 'failed') {
         dom.style.borderColor = "red"
@@ -29,14 +30,17 @@ const changeBorder =  (dom, domHelper, status) => {
     }
 }
 
+//Check if email has right pattern
 const emailHandler = () => {
     email.value.match(emailPattern) ? emailValid = true : emailValid = false
 }
 
+//Check if password has right pattern
 const passwordHandler = () => {
     password.value.match(passwordPattern) ?  passValid = true : passValid = false
 }
 
+//Show or Hide users given password
 const showHide = () => {
     if (iconShow.classList.contains('hidden')) {
         iconHide.classList.add('hidden')
@@ -49,6 +53,7 @@ const showHide = () => {
     }
 }
 
+//Check if user fill every input value
 const validateForm = () => {
     if(email.value.match(emailPattern) && password.value.match(passwordPattern)){
         button.disabled = false
@@ -57,6 +62,7 @@ const validateForm = () => {
     }
 }
 
+//Check if user fill every input value
 elArr.forEach((element) => {
     element.addEventListener('change', validateForm)
     element.addEventListener('keyup', validateForm)
