@@ -42,7 +42,7 @@ const requireAuth = (req, res, next) => {
   if (req.session.user) {
       next()
   } else {
-      res.sendFile(path.join(fePath,'login.html'))
+      res.sendFile(path.join(fePath,'/public/html/login.html'))
   }
 }
 
@@ -103,20 +103,20 @@ app.post('/account/register', (req, res) => {
 })
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(fePath,'index.html'))
+  res.sendFile(path.join(fePath,'/public/html/index.html'))
 })
 
 app.get('/login.html', (req, res) => {
-  res.sendFile(path.join(fePath,'login.html'))
+  res.sendFile(path.join(fePath,'/public/html/login.html'))
 })
 
 app.get('/register.html', (req, res) => {
-  res.sendFile(path.join(fePath,'register.html'))
+  res.sendFile(path.join(fePath,'/public/html/register.html'))
 })
 
 app.get('/dashboard.html', requireAuth, (req, res) => {
   console.log(req.session.user)
-  res.sendFile(path.join(fePath,'dashboard.html'))
+  res.sendFile(path.join(fePath,'/public/html/dashboard.html'))
 })
 
 app.listen(port, () => {
