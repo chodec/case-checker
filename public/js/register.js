@@ -160,6 +160,11 @@ button.addEventListener('click', (e) =>{
                     }
                     return res.json()
                   })
+                  .then((data) => {
+                    if (data === 200) {
+                      window.location.href = 'http://localhost:3000/login'
+                    }
+                  })
                   .catch(() => {
                     //for errs
                   })

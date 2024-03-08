@@ -3,11 +3,10 @@ const bcrypt = require('bcrypt')
 const { v4: uuidv4} = require('uuid')
 const session = require('express-session')
 const path = require('path')
-const { insertUser, getUser, validateDuplicate, saveSess } = require('./query.js')
+const { insertUser, getUser, validateDuplicate, saveSess, getSess, deleteSess } = require('./query.js')
 require('dotenv').config()
 
 let duplicate = true
-let userData = []
 
 const app = express()
 const port = 3000
@@ -38,8 +37,8 @@ app.use(session({
 
 //Check user session
 const requireAuth = (req, res, next) => {
-  console.log(req.session.user)
-  if (req.session.user) {
+  console.log(req.session.userId)
+  if (req.session.userId) {
       next()
   } else {
       res.sendFile(path.join(fePath,'/public/html/login.html'))
@@ -70,6 +69,7 @@ app.post('/account/register', (req, res) => {
           bcrypt.hash(data.password, salt, (err, hash) => {
             insertUser(data.nickname, data.email, hash, id).then(result => {
               if (result) {
+                  res.json(200)
                   console.log(`User ${data.nickname} created. ID: ${id} Email: ${data.email} Pass: ${hash}`)
               }
             })
@@ -88,11 +88,13 @@ app.post('/account/register', (req, res) => {
       if(result){
         req.session.regenerate(function (err) {
           if (err) next(err)
-          req.session.user = data.email
           saveSess(userData.rows[0].id, req.session, req.session.cookie._expires)
+          req.session.userId = userData.rows[0].id
+          console.log(req.session)
           req.session.save( (err) => {
             if (err) return next(err)
-            res.json(200)
+            //res.json(200)
+            res.redirect('/dashboard')
           })
         })
       } else {
@@ -106,16 +108,15 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(fePath,'/public/html/index.html'))
 })
 
-app.get('/login.html', (req, res) => {
+app.get('/login', (req, res) => {
   res.sendFile(path.join(fePath,'/public/html/login.html'))
 })
 
-app.get('/register.html', (req, res) => {
+app.get('/register', (req, res) => {
   res.sendFile(path.join(fePath,'/public/html/register.html'))
 })
 
-app.get('/dashboard.html', requireAuth, (req, res) => {
-  console.log(req.session.user)
+app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(fePath,'/public/html/dashboard.html'))
 })
 
