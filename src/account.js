@@ -1,16 +1,14 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const { v4: uuidv4} = require('uuid')
-const session = require('express-session')
 const path = require('path')
-const { insertUser, getUser, validateDuplicate, saveSess, getSess, deleteSess } = require('./query.js')
+const { insertUser, getUser, validateDuplicate, saveSess, getSess, deleteSess } = require('./db/query.js')
+const { sessions } = require('./sessions/sessions.js')
 require('dotenv').config()
 
 let duplicate = true
-
 const app = express()
 const port = 3000
-
 const saltRounds = 10
 
 let fePath = path.join(__dirname, '../')
@@ -20,30 +18,18 @@ app.use(express.json())
 
 app.use(express.static(fePath + '/public'))
 
-
 //Setup session for DB
-app.use(session({
-  genid: (req) => {
-    return  uuidv4()
-  },
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    secure: true, 
-    maxAge: 60000 * 60 * 24 * 28
-  }
-}))
+app.use(sessions)
 
 //Check user session
-const requireAuth = (req, res, next) => {
-  console.log(req.session.userId)
-  if (req.session.userId) {
-      next()
-  } else {
-      res.sendFile(path.join(fePath,'/public/html/login.html'))
-  }
-}
+// const requireAuth = (req, res, next) => {
+//   console.log(req.session.userId)
+//   if (req.session.userId) {
+//       next()
+//   } else {
+//       res.sendFile(path.join(fePath,'/public/html/login.html'))
+//   }
+// }
 
 //Validate users email, if duplicate send 400 error to user
 app.post('/account/register/validateDuplicate', (req, res) => {
