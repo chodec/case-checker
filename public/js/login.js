@@ -97,7 +97,7 @@ button.addEventListener('click', (e) =>{
         throw "failed"
       })
       .then((data) => {
-        // window.location.href = 'http://localhost:3000/dashboard'
+        window.location.href = 'http://localhost:3000/dashboard'
       })
       .catch(() => {
         changeBorder(email, emailHelp, 'failed')
