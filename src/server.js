@@ -1,9 +1,9 @@
 const express = require('express')
 const path = require('path')
 const sessionsMiddleware = require('./middlewares/sessions.js')
-const registerRouter = require('./middlewares/register.js')
-const validateRouter = require('./middlewares/validate.js')
-const loginRouter = require('./middlewares/login.js')
+const registerRouter = require('./routes/register.js')
+const validateRouter = require('./routes/validate.js')
+const loginRouter = require('./routes/login.js')
 
 const app = express()
 const port = 3000
@@ -16,6 +16,7 @@ app.use(express.static(fePath + '/public'))
 
 //Setup session
 app.use(sessionsMiddleware)
+//Setup routes
 app.use(validateRouter)
 app.use(registerRouter)
 app.use(loginRouter)
