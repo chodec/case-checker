@@ -15,4 +15,4 @@ const sessions = session({
     }
   })
 
-  module.exports = { sessions }
+  module.exports = sessions

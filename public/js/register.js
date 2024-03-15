@@ -40,8 +40,8 @@ const changeBorder =  (dom, domHelper, status) => {
 //Check if account with this email already exists
 const emailHandlerDuplicate = (email) => {
     fetch(urlValidate, {
-        method: "POST",
-        body: new URLSearchParams({
+          method: "POST",
+          body: new URLSearchParams({
           email: email
         }),
         headers: {
@@ -55,12 +55,11 @@ const emailHandlerDuplicate = (email) => {
             }
             return res.json()
           })
-          .then((data) => {
-            data === 200 ? duplicate = false : duplicate = true
-          })
-          .catch(() => {
-            //for errs
-          })
+        .then((data) => {
+          data === 200 ? duplicate = false : duplicate = true
+        })
+        .catch((err) => {
+        })
 }
 
 //Show or Hide users given password
@@ -143,8 +142,8 @@ button.addEventListener('click', (e) =>{
         } 
         else if (duplicate === false) {     
             fetch(urlRegister, {
-                method: "POST",
-                body: new URLSearchParams({
+                  method: "POST",
+                  body: new URLSearchParams({
                   nickname: nickname.value,
                   email: email.value,
                   password: password.value
@@ -159,15 +158,14 @@ button.addEventListener('click', (e) =>{
                       throw "failed"
                     }
                     return res.json()
-                  })
-                  .then((data) => {
-                    if (data === 200) {
-                      window.location.href = 'http://localhost:3000/login'
-                    }
-                  })
-                  .catch(() => {
-                    //for errs
-                  })
+                })
+                .then((data) => {
+                  if (data === 200) {
+                    window.location.href = 'http://localhost:3000/login'
+                  }
+                })
+                .catch((err) => {
+                })
         }
     },500)
 })

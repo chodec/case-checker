@@ -68,7 +68,7 @@ const validateDuplicate = async (email) => {
     await client.end()
     if (queryDuplicate.rowCount >= 1) {
       return true
-    } else if (queryDuplicate.rowCount == 0) {
+    } else if (queryDuplicate.rowCount === 0) {
       return false
     }
   } catch (error) {
