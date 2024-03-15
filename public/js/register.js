@@ -131,8 +131,9 @@ iconHide.addEventListener('click', showHide)
 iconShow.addEventListener('click', showHide)
 button.addEventListener('click', (e) =>{
     e.preventDefault()
+    console.log(email.value)
     emailHandlerDuplicate(email.value)
-    setTimeout ( () => {
+        console.log(duplicate)
         if (duplicate === true) {
             changeBorder(email,emailDuplicate, "failed")
             emailDuplicate.style.display = "table"
@@ -160,12 +161,12 @@ button.addEventListener('click', (e) =>{
                     return res.json()
                 })
                 .then((data) => {
-                  if (data === 200) {
+                  console.log(data.status)
+                  if (data.status === 200) {
                     window.location.href = 'http://localhost:3000/login'
                   }
                 })
                 .catch((err) => {
                 })
         }
-    },500)
 })

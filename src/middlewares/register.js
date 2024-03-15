@@ -9,12 +9,8 @@ const saltRounds = 10
 //Create user and insert him into DB with secure password
 router.post('/account/register', (req, res) => {
     const data = req.body
-    console.log(data)
     validateDuplicate(data.email).then(result => {
-        console.log(result)
-    }).then(data => {
-        console.log(data)
-        if (duplicate === false) {
+        if (result === false) {
             id = uuidv4()
             bcrypt.genSalt(saltRounds, (err, salt ) => {
                 bcrypt.hash(data.password, salt, (err, hash) => {
