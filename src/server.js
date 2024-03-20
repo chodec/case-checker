@@ -44,7 +44,6 @@ app.get('/register', (req, res) => {
 })
 
 app.get('/dashboard', (req, res) => {
-  console.log(req.session)
   res.sendFile(path.join(fePath,'/public/html/dashboard.html'))
 })
 
