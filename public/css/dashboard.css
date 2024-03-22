@@ -37,13 +37,19 @@ a:focus {
     background-color: #e38716;
     border-radius: 0;
     margin-left: 230px;
+    transition: all 0.3s;
 }
 
 #sidebar {
     width: 250px;
     background: #161618;;
     color: #fcf3e8;
-    transition: all 0.3s;
+    
+}
+
+#sidebar img{
+    width: 50px;
+    height: 50px;
 }
 
 #sidebar.active {
@@ -53,6 +59,7 @@ a:focus {
 #sidebar .sidebarHeader {
     padding: 20px;
     background: #161618;
+    transition: all 0.6s;
 }
 
 #sidebar ul.components {
@@ -94,7 +101,6 @@ a[data-toggle="collapse"] {
 }
 
 #main {
-    width: 100%;
     min-height: 100vh;
     transition: all 0.3s;
 }
