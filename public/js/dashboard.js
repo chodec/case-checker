@@ -8,11 +8,11 @@ let toggle = true
 
 const toggleNav = () => {
     if (toggle) {
-        sidebar.style.width = '40px'
+        sidebar.style.width = '50px'
         for (let i = 0; i < hiddenSmall.length; i++) {
             hiddenSmall[i].style.display = 'none' 
         }
-        sidebarCollapse.style.marginLeft = '20px'
+        sidebarCollapse.style.marginLeft = '30px'
         sidebarCollapseChild.classList.remove = 'fa-chevron-left'
         sidebarCollapseChild.className = 'fa-solid  fa-chevron-right'
         toggle = false
