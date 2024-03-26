@@ -112,3 +112,32 @@ a[data-toggle="collapse"] {
     padding-top: 2%;
 }
 
+img.caseSmall {
+    width: 20px;
+}
+.caseCount{
+    float: left;
+}
+
+.caseCountEdit{
+    float: right;
+}
+
+.fa-regular {
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: normal !important;
+}
+
+.fa-regular:hover{
+    color: #e38716;
+}
+
+.addCase {
+    background-color: #fcf3e8;
+}
+
+.addCase:hover{
+    background-color: #e38716;
+    color:#fcf3e8;
+}
