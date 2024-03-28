@@ -29,6 +29,7 @@ const toggleNav = () => {
     }
 }
 
+
 //Vyvoj ceny na marketu konkretniho itemu
 //https://steamcommunity.com/market/pricehistory/?country=CZ&currency=3&appid=730&market_hash_name=P250%20%7C%20Cartel%20%28Battle-Scarred%29
 
