@@ -5,6 +5,7 @@ const main = document.getElementById('main')
 const hiddenSmall = document.getElementsByClassName('hiddenSmall')
 
 let toggle = true
+let url = 'https://steamcommunity.com/market/pricehistory/?country=us&currency=3&appid=730&market_hash_name=Kilowatt%20Case'
 
 const toggleNav = () => {
     if (toggle) {
