@@ -113,7 +113,7 @@ a[data-toggle="collapse"] {
 }
 
 img.caseSmall {
-    width: 20px;
+    width: 35px;
 }
 .caseCount{
     float: left;
@@ -140,4 +140,17 @@ img.caseSmall {
 .addCase:hover{
     background-color: #e38716;
     color:#fcf3e8;
+}
+
+.dark{
+    background: #212529;
+    color:#fcf3e8;
+}
+
+.success{
+    color: green;
+}
+
+.fail{
+    color: red; 
 }

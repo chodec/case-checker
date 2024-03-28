@@ -38,13 +38,17 @@
 
     <div id="main">
       <div class="container px-4">
-        <h2>Hello, user.</h2>
+        <h2>Hello, {user}.</h2>
         <div class="row gx-2 gy-2">
-          <div class="col-7">
-           <div class="p-3 border bg-light">Overview</div>
+          <div class="col-9">
+           <div class="p-3 dark">Graph? idk</div>
           </div>
-          <div class="col-5">
-            <div class="p-3 border bg-light">Smt</div>
+          <div class="col-3">
+            <div class="p-3 dark">
+              <h5>Your portofolio is</h5>
+              <p><span class="success"><i class="fa-solid fa-arrow-trend-up"></i> 43$</span> in profit.</p>
+              <p><span class="fail"><i class="fa-solid fa-arrow-trend-down"></i> 43$</span> in loss.</p>
+            </div>
           </div>
           <div class="col-6">
             <table class="table table-hover table-dark">
@@ -52,6 +56,7 @@
                 <tr>
                   <th scope="col"></th>
                   <th scope="col">Item</th>
+                  <th scope="col">Purchased</th>
                   <th scope="col">Count</th>
                 </tr>
               </thead>
@@ -59,20 +64,23 @@
                 <tr>
                   <th scope="row"><img src="../img/items/bravo_case.png" class="caseSmall" alt="" srcset=""> </th>
                   <td>Bravo</td>
+                  <td>24. 12. 2004</td>
                   <td><span class="caseCount">20</span><span class="caseCountEdit"><i class="fa-regular fa-pen-to-square"></i> <i class="fa-regular fa-trash-can"></i></span></td>
                 </tr>
                 <tr>
                   <th scope="row"><img src="../img/items/danger_zone_case.png" class="caseSmall" alt="" srcset=""> </th>
                   <td>Danger Zone</td>
+                  <td>09. 03. 2008</td>
                   <td><span class="caseCount">6</span><span class="caseCountEdit"> <i class="fa-regular fa-pen-to-square"></i> <i class="fa-regular fa-trash-can"></i></i></span></td>
                 </tr>
                 <tr>
                   <th scope="row"><img src="../img/items/sticker_capsule.png" class="caseSmall" alt="" srcset=""> </th>
                   <td>Sticker</td>
+                  <td>31. 07. 2013</td>
                   <td><span class="caseCount">114</span><span class="caseCountEdit"><i class="fa-regular fa-pen-to-square"></i> <i class="fa-regular fa-trash-can"></i></span></td>
                 </tr>
                 <tr>
-                  <td colspan="3"><span class="caseCountEdit"><button class="btn addCase">Add Items <i class="fa-solid fa-plus"></i></button></span></td>
+                  <td colspan="4"><span class="caseCountEdit"><button class="btn addCase">Add Items <i class="fa-solid fa-plus"></i></button></span></td>
                 </tr>
               </tbody>
             </table>
