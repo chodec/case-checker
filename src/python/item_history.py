@@ -11,9 +11,14 @@ cases = ['Kilowatt%20Case', 'Dreams%20%26%20Nightmares%20Case', 'Fracture%20Case
 url = 'http://steamcommunity.com/market/pricehistory/?country=PT&currency=3&appid=730&market_hash_name='
 
 cookie = {'steamLoginSecure': steam_login_secure}
+directory = r'C:\Users\DomLe\OneDrive\Plocha\case-checker\src\db\json'
+
 
 for x in cases:
    data = requests.get(url + x, cookies=cookie)
-   f = open(x + '.json', 'w+')
-   f.write(data.text)
-   print(f.read())
+
+   file_path = os.path.join(directory, x + '.json')
+
+   with open(file_path, 'w+') as f:
+      f.write(data.text)
+      print(f.read())
