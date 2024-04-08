@@ -3,11 +3,11 @@ const path = require('path')
 const cors = require('cors')
 
 const sessionsMiddleware = require('./middlewares/sessions.js')
-//const getCase = require('./middlewares/steamApi.js')
 
 const registerRouter = require('./routes/register.js')
 const validateRouter = require('./routes/validate.js')
 const loginRouter = require('./routes/login.js')
+const steamApi = require('./routes/steamApi.js')
 
 const app = express()
 const port = 3000
@@ -25,6 +25,7 @@ app.use(sessionsMiddleware)
 app.use(validateRouter)
 app.use(registerRouter)
 app.use(loginRouter)
+app.use(steamApi)
 
 //Check user session
 const requireAuth = (req, res, next) => {
@@ -51,6 +52,7 @@ app.get('/register', (req, res) => {
 app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(fePath,'/public/html/dashboard.html'))
 })
+
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
