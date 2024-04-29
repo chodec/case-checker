@@ -1,9 +1,10 @@
-const path = require('path')
 const express = require('express')
 const fs = require('fs')
 const router = express.Router()
 
-const jsonPath = path.join(__dirname, '../')
+//https://stackoverflow.com/questions/29902280/get-price-of-item-in-steam-community-market-with-json
+//get current item value
+
 
 router.get('/pricehistory/case/:filename', (req, res) => {
     const filename = req.params.filename
