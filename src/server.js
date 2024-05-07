@@ -8,6 +8,7 @@ const registerRouter = require('./routes/register.js')
 const validateRouter = require('./routes/validate.js')
 const loginRouter = require('./routes/login.js')
 const steamApi = require('./routes/steamApi.js')
+const insertAsset = require('./routes/insertAsset.js')
 
 const app = express()
 const port = 3000
@@ -26,6 +27,7 @@ app.use(validateRouter)
 app.use(registerRouter)
 app.use(loginRouter)
 app.use(steamApi)
+app.use(insertAsset)
 
 //Check user session
 const requireAuth = (req, res, next) => {

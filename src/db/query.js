@@ -79,4 +79,28 @@ const validateDuplicate = async (email) => {
   }
 }
 
-module.exports = { insertUser, getUser, validateDuplicate}
+const insertAsset = async (id, user_id, asset_type, asset_name, asset_count, bought_date) => {
+  const client = new Client({
+    user: "postgres",
+    host: "localhost",
+    database: "users",
+    password: process.env.DB_PASS,
+    port: "5432",
+  });
+  try {
+    await client.connect();
+    await client.query(
+      `INSERT INTO assets (id, user_id, asset_type, asset_name, asset_count, bought_date) 
+             VALUES ($1, $2, $3, $4, $5, $6)`,
+      [id, user_id, asset_type, asset_name, asset_count, bought_date]
+    )
+    return true;
+  } catch (error) {
+    console.error(error.stack)
+    return false
+  } finally {
+    await client.end()
+  }
+}
+
+module.exports = { insertUser, getUser, validateDuplicate, insertAsset}
