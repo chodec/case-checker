@@ -27,9 +27,7 @@ def download_image(x, url, directory):
         with open(json_file_path, 'w') as json_file:
             json.dump(data, json_file)
 
-        print(f'{x} appended to {json_file_path}.')
     else:
-         print(f'{x} Redownload')
          download_image(x, url, directory)
 
 
@@ -39,7 +37,6 @@ with open(json_file_path, 'r') as json_file:
 
 for x in cases:
     if x not in data:
-        print(f'{x} not found in JSON. download_image on the way')
         download_image(x, url, directory)
     else:
         print(f'{x} found. Skip')
