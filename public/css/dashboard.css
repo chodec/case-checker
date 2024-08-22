@@ -161,6 +161,9 @@ img.caseSmall {
 .fail{
     color: red; 
 }
+.black{
+    color: #161618;
+}
 
 .modal-header{
     border: none;
@@ -168,4 +171,31 @@ img.caseSmall {
 
 .modal-footer{
     border: none;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    width: auto!important; 
+    min-width: 100%; 
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    margin-top: 4px!important;
+}
+
+.dropdown-item {
+    white-space: nowrap; 
+    padding: 4px 8px;
+}
+
+.dropdown-item img {
+    margin-right: 10px;
+}
+
+.dropdown-toggle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
 }

@@ -30,18 +30,34 @@ const toggleNav = () => {
         toggle = true
     }
 }
-
+const editCaseName = (name) => {
+    return name.toString().replaceAll("%20", " ").replaceAll("%26", "&").replaceAll("%3AGO", ":GO")
+}
 const showCases = () => {
     fetch('../img/items/cases/data.json')
         .then(response => response.json())
         .then(data => {
             for (let i = 0; i < Object.values(data).length; i++) {
-                const node = document.createElement("option");
-                const textnode = document.createTextNode(Object.values(data)[i].case_name)
-                node.appendChild(textnode)
-                displayCases.appendChild(node)
-                console.log(Object.values(data)[i])
+                const itemData = Object.values(data)[i];
+                
+                const item = document.createElement("div")
+                item.className = "dropdown-item d-flex align-items-center"
+                item.style.cursor = "pointer"
+            
+                const img = document.createElement("img")
+                img.src = itemData.image_url
+                img.style.width = "30px"
+                img.style.height = "30px"
+                img.className = "me-2"
+            
+                const textNode = document.createTextNode(editCaseName(itemData.case_name))
+            
+                item.appendChild(img)
+                item.appendChild(textNode)
+            
+                displayCases.appendChild(item)
             }
+            
         })
         .catch(error => console.log(error))
 }
