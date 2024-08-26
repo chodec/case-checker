@@ -69,19 +69,7 @@
                   <td><span class="caseCount">20</span><span class="caseCountEdit"><i class="fa-regular fa-pen-to-square"></i> <i class="fa-regular fa-trash-can"></i></span></td>
                 </tr>
                 <tr>
-                  <th scope="row"><img src="../img/items/danger_zone_case.png" class="caseSmall" alt="" srcset=""> </th>
-                  <td>Danger Zone</td>
-                  <td>09. 03. 2008</td>
-                  <td><span class="caseCount">6</span><span class="caseCountEdit"> <i class="fa-regular fa-pen-to-square"></i> <i class="fa-regular fa-trash-can"></i></i></span></td>
-                </tr>
-                <tr>
-                  <th scope="row"><img src="../img/items/sticker_capsule.png" class="caseSmall" alt="" srcset=""> </th>
-                  <td>Sticker</td>
-                  <td>31. 07. 2013</td>
-                  <td><span class="caseCount">114</span><span class="caseCountEdit"><i class="fa-regular fa-pen-to-square"></i> <i class="fa-regular fa-trash-can"></i></span></td>
-                </tr>
-                <tr>
-                  <td colspan="4"><span class="caseCountEdit"><button type="button" class="btn addCase" data-bs-toggle="modal" data-bs-target="#addCaseModal">Add Items <i class="fa-solid fa-plus"></i></button></span></td>
+                  <td colspan="4"><span class="caseCountEdit"><button type="button" id="openModal" class="btn addCase" data-bs-toggle="modal" data-bs-target="#addCaseModal">Add Items <i class="fa-solid fa-plus"></i></button></span></td>
                 </tr>
               </tbody>
             </table>
@@ -94,7 +82,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="d-flex justify-content-center p-3">
-                    <div id="customDropdown" class="dropdown form-control">
+                    <div id="pickCase" class="dropdown form-control">
                         <button class="btn btn-light dropdown-toggle w-auto" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                             Select case
                         </button>
