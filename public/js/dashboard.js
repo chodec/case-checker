@@ -6,6 +6,9 @@ const hiddenSmall = document.getElementsByClassName('hiddenSmall')
 const displayCases = document.getElementById('displayCases')
 const openModal = document.getElementById('openModal')
 const dropdownMenuButton = document.getElementById('dropdownMenuButton')
+const confirmAddCase = document.getElementById('confirmAddCase')
+const startDate = document.getElementById('startDate')
+const count = document.getElementById('count')
 
 let toggle = true
 let url = 'https://steamcommunity.com/market/pricehistory/?country=us&currency=3&appid=730&market_hash_name=Kilowatt%20Case'
@@ -72,7 +75,17 @@ const showCases = () => {
 }
 
 displayCases.addEventListener('click', (e) => {
-    dropdownMenuButton.innerHTML = editCaseName(e.target.id)
+    let shorterName = e.target.id
+    if (e.target.id.length > 15) {
+        shorterName = e.target.id.substring(0,15) + '...'
+    }
+    dropdownMenuButton.innerHTML = editCaseName(shorterName)
+})
+
+confirmAddCase.addEventListener('click', (e) => {
+    console.log(startDate.value)
+    console.log(count.value)
+    console.log(reverseEditCaseName(dropdownMenuButton.innerHTML))
 })
 
 openModal.addEventListener('click', showCases())
