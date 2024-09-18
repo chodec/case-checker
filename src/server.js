@@ -9,6 +9,7 @@ const validateRouter = require('./routes/validate.js')
 const loginRouter = require('./routes/login.js')
 const steamApi = require('./routes/steamApi.js')
 const insertAsset = require('./routes/insertAsset.js')
+const session = require('express-session')
 
 const app = express()
 const port = 3000
@@ -31,7 +32,6 @@ app.use(insertAsset)
 
 //Check user session
 const requireAuth = (req, res, next) => {
-  console.log(req.session.userId)
   if (req.session.userId) {
       next()
   } else {
@@ -52,7 +52,7 @@ app.get('/register', (req, res) => {
 })
 
 app.get('/dashboard', requireAuth, (req, res) => {
-  res.sendFile(path.join(fePath,'/public/html/dashboard.html'))
+  res.sendFile(path.join(fePath,'/public/html/dashboard.html')) 
 })
 
 

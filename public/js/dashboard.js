@@ -9,9 +9,15 @@ const dropdownMenuButton = document.getElementById('dropdownMenuButton')
 const confirmAddCase = document.getElementById('confirmAddCase')
 const startDate = document.getElementById('startDate')
 const count = document.getElementById('count')
+const userName = document.getElementById('userName')
 
 let toggle = true
 let url = 'https://steamcommunity.com/market/pricehistory/?country=us&currency=3&appid=730&market_hash_name=Kilowatt%20Case'
+
+const setWelcomeText = () =>{
+    let cookieVal = Object.fromEntries(document.cookie.split('; ').map(v=>v.split(/=(.*)/s).map(decodeURIComponent)))
+    userName.innerHTML = cookieVal.username
+}
 
 const toggleNav = () => {
     if (toggle) {
@@ -89,6 +95,7 @@ confirmAddCase.addEventListener('click', (e) => {
 })
 
 openModal.addEventListener('click', showCases())
+setWelcomeText()
 
 //Vyvoj ceny na marketu konkretniho itemu
 //https://steamcommunity.com/market/pricehistory/?country=CZ&currency=3&appid=730&market_hash_name=P250%20%7C%20Cartel%20%28Battle-Scarred%29

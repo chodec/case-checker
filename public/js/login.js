@@ -91,12 +91,14 @@ button.addEventListener('click', (e) =>{
         if (res.status === 200) {
             if (res.status !== 200) {
                 throw "failed"
-              }
-              return res.json()
+            }
+            return res.json()
         }
         throw "failed"
       })
       .then((data) => {
+        document.cookie = `username=${data.user[1]}`
+        document.cookie = `email=${data.user[2]}`
         window.location.href = 'http://localhost:3000/dashboard'
       })
       .catch(() => {

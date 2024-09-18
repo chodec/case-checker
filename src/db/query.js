@@ -37,7 +37,7 @@ const getUser = async (email) => {
   try {
     await client.connect()
     userData = await client.query(
-      `SELECT email, pass, id FROM users 
+      `SELECT * FROM users 
               WHERE email=($1)`,
       [email]
     )
