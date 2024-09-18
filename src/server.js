@@ -51,7 +51,7 @@ app.get('/register', (req, res) => {
   res.sendFile(path.join(fePath,'/public/html/register.html'))
 })
 
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard', requireAuth, (req, res) => {
   res.sendFile(path.join(fePath,'/public/html/dashboard.html'))
 })
 
