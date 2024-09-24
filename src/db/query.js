@@ -1,16 +1,17 @@
 const { Client } = require("pg")
 
+const client = new Client({
+  user: "postgres",
+  host: "localhost",
+  database: "users",
+  password: process.env.DB_PASS,
+  port: "5432",
+})
+
 //Create user
 const insertUser = async (username, email, pass, id) => {
-  const client = new Client({
-    user: "postgres",
-    host: "localhost",
-    database: "users",
-    password: process.env.DB_PASS,
-    port: "5432",
-  });
   try {
-    await client.connect();
+    await client.connect()
     await client.query(
       `INSERT INTO users (username, email, pass, id) 
              VALUES ($1, $2, $3, $4)`,
@@ -20,20 +21,11 @@ const insertUser = async (username, email, pass, id) => {
   } catch (error) {
     console.error(error.stack)
     return false
-  } finally {
-    await client.end()
   }
 }
 
 //Get users email from DB
 const getUser = async (email) => {
-  const client = new Client({
-    user: "postgres",
-    host: "localhost",
-    database: "users",
-    password: process.env.DB_PASS,
-    port: "5432",
-  })
   try {
     await client.connect()
     userData = await client.query(
@@ -45,27 +37,17 @@ const getUser = async (email) => {
   } catch (error) {
     console.error(error.stack)
     return false
-  } finally {
-    await client.end()
   }
 }
 
 //Check if users email already exists in DB
 const validateDuplicate = async (email) => {
-  const client = new Client({
-    user: "postgres",
-    host: "localhost",
-    database: "users",
-    password: process.env.DB_PASS,
-    port: "5432",
-  })
   try {
     await client.connect()
     queryDuplicate = await client.query(
       `SELECT email FROM users WHERE email = $1`,
       [email]
     )
-    await client.end()
     if (queryDuplicate.rowCount >= 1) {
       return true
     } else if (queryDuplicate.rowCount === 0) {
@@ -74,19 +56,10 @@ const validateDuplicate = async (email) => {
   } catch (error) {
     console.error(error.stack)
     return false
-  } finally {
-    await client.end()
   }
 }
 
 const insertAsset = async (id, user_id, asset_type, asset_name, asset_count, bought_date) => {
-  const client = new Client({
-    user: "postgres",
-    host: "localhost",
-    database: "users",
-    password: process.env.DB_PASS,
-    port: "5432",
-  });
   try {
     await client.connect();
     await client.query(
@@ -98,8 +71,6 @@ const insertAsset = async (id, user_id, asset_type, asset_name, asset_count, bou
   } catch (error) {
     console.error(error.stack)
     return false
-  } finally {
-    await client.end()
   }
 }
 
