@@ -13,8 +13,6 @@ const client = new Client({
   port: port,
 })
 
-
-//Create user
 const insertUser = async (username, email, pass, id) => {
   try {
     await client.connect()
@@ -30,7 +28,6 @@ const insertUser = async (username, email, pass, id) => {
   }
 }
 
-//Get users email from DB
 const getUser = async (email) => {
   try {
     await client.connect()
@@ -46,7 +43,6 @@ const getUser = async (email) => {
   }
 }
 
-//Check if users email already exists in DB
 const validateDuplicate = async (email) => {
   try {
     await client.connect()
@@ -64,21 +60,6 @@ const validateDuplicate = async (email) => {
     return false
   }
 }
-
-// const getUserIDByEmail = async (email) => {
-//   try {
-//     await client.connect()
-//     const userData = await client.query(
-//       `SELECT id FROM users 
-//               WHERE email = $1`,
-//       [email]
-//     )
-//     return userData.rows[0]?.id || null
-//   } catch (error) {
-//     console.error(error.stack)
-//     return null
-//   }
-// }
 
 const insertAsset = async (email, asset_type, asset_name, asset_count, bought_date, assetId) => {
   try {

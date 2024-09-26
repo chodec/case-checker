@@ -10,13 +10,17 @@ const confirmAddCase = document.getElementById('confirmAddCase')
 const startDate = document.getElementById('startDate')
 const count = document.getElementById('count')
 const userName = document.getElementById('userName')
+const cookie = Object.fromEntries(document.cookie.split('; ').map(v=>v.split(/=(.*)/s).map(decodeURIComponent)))
 
 let toggle = true
 let url = 'https://steamcommunity.com/market/pricehistory/?country=us&currency=3&appid=730&market_hash_name=Kilowatt%20Case'
+let caseValid = false
+let countValid = false
+
+startDate.value = new Date().toISOString().substring(0, 10)
 
 const setWelcomeText = () =>{
-    let cookieVal = Object.fromEntries(document.cookie.split('; ').map(v=>v.split(/=(.*)/s).map(decodeURIComponent)))
-    userName.innerHTML = cookieVal.username
+    userName.innerHTML = cookie.username
 }
 
 const toggleNav = () => {
@@ -88,13 +92,32 @@ displayCases.addEventListener('click', (e) => {
     dropdownMenuButton.innerHTML = editCaseName(shorterName)
 })
 
+const ifFormValEmpty = (val) => {
+    val === '' ? console.log('empty') : console.log(val)
+}
+
+const caseTypeHandler = () => {
+    let initCaseVal = JSON.stringify(dropdownMenuButton.innerHTML.split(''))
+    initCaseVal.split('"')[1] === "\\n" ? caseValid = false : caseValid = true
+    console.log(caseValid)
+}
+
+const countHandler = () => { 
+    count.value === '0' ? countValid = false : countValid = true
+    console.log(countValid)
+}
+
 confirmAddCase.addEventListener('click', (e) => {
-    console.log(startDate.value)
-    console.log(count.value)
-    console.log(reverseEditCaseName(dropdownMenuButton.innerHTML))
+
 })
 
-openModal.addEventListener('click', showCases())
+openModal.addEventListener('click', (e) =>{
+    showCases()
+    confirmAddCase.disabled = true
+})
+
+dropdownMenuButton.addEventListener('change', caseTypeHandler)
+count.addEventListener('click', countHandler)
 setWelcomeText()
 
 //Vyvoj ceny na marketu konkretniho itemu
