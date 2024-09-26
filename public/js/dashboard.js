@@ -72,6 +72,8 @@ const createDropDownItem = (data, index) => {
     item.appendChild(textNode)
 
     displayCases.appendChild(item)
+
+    item.addEventListener('click', caseTypeHandler)
 }
 
 const showCases = () => {
@@ -92,19 +94,31 @@ displayCases.addEventListener('click', (e) => {
     dropdownMenuButton.innerHTML = editCaseName(shorterName)
 })
 
-const ifFormValEmpty = (val) => {
-    val === '' ? console.log('empty') : console.log(val)
+const formValid = () => {
+    if (caseValid === true && countValid === true) {
+        confirmAddCase.disabled = false
+    } else {
+        confirmAddCase.disabled = true
+    }
 }
 
 const caseTypeHandler = () => {
     let initCaseVal = JSON.stringify(dropdownMenuButton.innerHTML.split(''))
-    initCaseVal.split('"')[1] === "\\n" ? caseValid = false : caseValid = true
-    console.log(caseValid)
+    if(initCaseVal.split('"')[1] === "\n"){
+        caseValid = false
+    } else {
+        caseValid = true
+        formValid()
+    }
 }
 
 const countHandler = () => { 
-    count.value === '0' ? countValid = false : countValid = true
-    console.log(countValid)
+    if(count.value === '0'){
+        countValid = false
+    } else {
+        countValid = true
+        formValid()
+    }
 }
 
 confirmAddCase.addEventListener('click', (e) => {
@@ -116,7 +130,7 @@ openModal.addEventListener('click', (e) =>{
     confirmAddCase.disabled = true
 })
 
-dropdownMenuButton.addEventListener('change', caseTypeHandler)
+count.addEventListener('keyup', countHandler)
 count.addEventListener('click', countHandler)
 setWelcomeText()
 
