@@ -59,6 +59,7 @@ const createDropDownItem = (data, index) => {
     item.className = "dropdown-item d-flex align-items-center"
     item.id = itemData.case_name
     item.style.cursor = "pointer"
+    item.name = itemData.case_name
 
     const img = document.createElement("img")
     img.src = itemData.image_url
@@ -92,6 +93,7 @@ displayCases.addEventListener('click', (e) => {
         shorterName = e.target.id.substring(0,15) + '...'
     }
     dropdownMenuButton.innerHTML = editCaseName(shorterName)
+    dropdownMenuButton.name = e.target.id
 })
 
 const formValid = () => {
@@ -121,15 +123,47 @@ const countHandler = () => {
     }
 }
 
-confirmAddCase.addEventListener('click', (e) => {
-
-})
-
 openModal.addEventListener('click', (e) =>{
     showCases()
     confirmAddCase.disabled = true
 })
 
+confirmAddCase.addEventListener('click', (e) => {
+    e.preventDefault()
+    console.log(dropdownMenuButton.name)
+    console.log(count.value)
+    console.log(startDate.value)
+    console.log(cookie.email)
+    fetch(urlLogin, {
+        method: "POST",
+        body: new URLSearchParams({
+          email: email.value,
+          password: password.value
+        }),
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded"
+        },
+        credentials: "include"
+        })
+      .then((res) => {
+        if (res.status === 200) {
+            if (res.status !== 200) {
+                throw "failed"
+            }
+            return res.json()
+        }
+        throw "failed"
+      })
+      .then((data) => {
+        document.cookie = `username=${data.user[1]}`
+        document.cookie = `email=${data.user[2]}`
+        window.location.href = 'http://localhost:3000/dashboard'
+      })
+      .catch(() => {
+        changeBorder(email, emailHelp, 'failed')
+        changeBorder(password, passwordHelp, 'failed')
+      })
+})
 count.addEventListener('keyup', countHandler)
 count.addEventListener('click', countHandler)
 setWelcomeText()

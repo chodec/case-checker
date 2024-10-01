@@ -4,18 +4,13 @@ const { insertAsset } = require('../db/query.js')
 const router = express.Router()
 
 //Create asset and insert him into DB
-router.post('/asset/insert/:email/:asset_type/:asset_name/:asset_count/:bought_date', (req, res) => {
-    const email = req.params.email
+router.post('/asset/insert', (req, res) => {
+    const data = req.body
     const assetId = uuidv4()
-    const asset_type = req.params.asset_type
-    const asset_name = req.params.asset_name
-    const asset_count = req.params.asset_count
-    const bought_date = req.params.bought_date
-    console.log(asset_count)
-    
-    insertAsset(email, asset_type, asset_name, asset_count, bought_date, assetId).then(result => {
+
+    insertAsset(data.email, data.asset_type, data.asset_name, data.asset_count, data.bought_date, assetId).then(result => {
         if(result){
-            res.send(`${asset_count} ${asset_type} ${asset_name} bought ${bought_date} has been added to the ${email}`)
+            res.send(`${data.asset_count} ${data.asset_type} ${data.asset_name} bought ${data.bought_date} has been added to the ${data.email}`)
         }
     }).catch(err =>{
         res.status(500).send(err)
