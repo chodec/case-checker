@@ -1,11 +1,11 @@
-const { Client } = require("pg")
+const { Pool  } = require("pg")
 const user = 'postgres'
 const host = 'localhost'
 const dbUsers = 'users'
 const password =  process.env.DB_PASS
 const port = '5432'
 
-const client = new Client({
+const pool = new Pool({
   user: user,
   host: host,
   database: dbUsers,
@@ -14,8 +14,8 @@ const client = new Client({
 })
 
 const insertUser = async (username, email, pass, id) => {
+  const client = await pool.connect()
   try {
-    await client.connect()
     await client.query(
       `INSERT INTO users (username, email, pass, id) 
              VALUES ($1, $2, $3, $4)`,
@@ -25,13 +25,15 @@ const insertUser = async (username, email, pass, id) => {
   } catch (error) {
     console.error(error.stack)
     return false
+  } finally {
+    client.release() // Always release the client back to the pool
   }
 }
 
 const getUser = async (email) => {
+  const client = await pool.connect()
   try {
-    await client.connect()
-    userData = await client.query(
+    const userData = await client.query(
       `SELECT * FROM users 
               WHERE email=($1)`,
       [email]
@@ -40,30 +42,30 @@ const getUser = async (email) => {
   } catch (error) {
     console.error(error.stack)
     return false
+  } finally {
+    client.release()
   }
 }
 
 const validateDuplicate = async (email) => {
+  const client = await pool.connect()
   try {
-    await client.connect()
-    queryDuplicate = await client.query(
+    const queryDuplicate = await client.query(
       `SELECT email FROM users WHERE email = $1`,
       [email]
     )
-    if (queryDuplicate.rowCount >= 1) {
-      return true
-    } else if (queryDuplicate.rowCount === 0) {
-      return false
-    }
+    return queryDuplicate.rowCount >= 1
   } catch (error) {
     console.error(error.stack)
     return false
+  } finally {
+    client.release()
   }
 }
 
 const insertAsset = async (email, asset_type, asset_name, asset_count, bought_date, assetId) => {
+  const client = await pool.connect()
   try {
-    await client.connect()
     await client.query(
       `INSERT INTO assets (id, user_id, asset_type, asset_name, asset_count, bought_date)
        VALUES (
@@ -78,6 +80,8 @@ const insertAsset = async (email, asset_type, asset_name, asset_count, bought_da
   } catch (error) {
     console.error(error.stack)
     return false
+  } finally {
+    client.release()
   }
 }
 

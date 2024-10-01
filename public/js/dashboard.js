@@ -14,8 +14,10 @@ const cookie = Object.fromEntries(document.cookie.split('; ').map(v=>v.split(/=(
 
 let toggle = true
 let url = 'https://steamcommunity.com/market/pricehistory/?country=us&currency=3&appid=730&market_hash_name=Kilowatt%20Case'
+const urlAssetInsert = 'http://localhost:3000/asset/insert'
 let caseValid = false
 let countValid = false
+let assetType
 
 startDate.value = new Date().toISOString().substring(0, 10)
 
@@ -128,17 +130,27 @@ openModal.addEventListener('click', (e) =>{
     confirmAddCase.disabled = true
 })
 
+const setAssetType = (assetName) => {
+    if (assetName.includes('case')) {
+        assetType = 'case'
+    }
+}
+
 confirmAddCase.addEventListener('click', (e) => {
     e.preventDefault()
     console.log(dropdownMenuButton.name)
     console.log(count.value)
     console.log(startDate.value)
     console.log(cookie.email)
-    fetch(urlLogin, {
+    setAssetType(dropdownMenuButton.name)
+    fetch(urlAssetInsert, {
         method: "POST",
         body: new URLSearchParams({
-          email: email.value,
-          password: password.value
+          email: cookie.email,
+          asset_name: dropdownMenuButton.name,
+          bought_date: startDate.value,
+          asset_count: count.value,
+          asset_type: assetType
         }),
         headers: {
           "Content-type": "application/x-www-form-urlencoded"
@@ -155,13 +167,10 @@ confirmAddCase.addEventListener('click', (e) => {
         throw "failed"
       })
       .then((data) => {
-        document.cookie = `username=${data.user[1]}`
-        document.cookie = `email=${data.user[2]}`
-        window.location.href = 'http://localhost:3000/dashboard'
+        console.log(data)
       })
-      .catch(() => {
-        changeBorder(email, emailHelp, 'failed')
-        changeBorder(password, passwordHelp, 'failed')
+      .catch((err) => {
+        console.log(err)
       })
 })
 count.addEventListener('keyup', countHandler)
