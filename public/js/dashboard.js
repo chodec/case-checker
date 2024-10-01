@@ -127,6 +127,7 @@ const countHandler = () => {
 
 openModal.addEventListener('click', (e) =>{
     showCases()
+    startDate.max = new Date().toISOString().substring(0, 10)
     confirmAddCase.disabled = true
 })
 
