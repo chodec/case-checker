@@ -85,4 +85,21 @@ const insertAsset = async (email, asset_type, asset_name, asset_count, bought_da
   }
 }
 
+const getUserAssets = async (email) => {
+  const client = await pool.connect()
+  try {
+    const userData = await client.query(
+      `SELECT * FROM assets 
+              WHERE user_id=(SELECT id FROM users WHERE email = $1)`,
+      [email]
+    )
+    return userData
+  } catch (error) {
+    console.error(error.stack)
+    return false
+  } finally {
+    client.release()
+  }
+}
+
 module.exports = { insertUser, getUser, validateDuplicate, insertAsset, insertAsset }
