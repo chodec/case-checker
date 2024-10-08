@@ -102,4 +102,4 @@ const getUserAssets = async (email) => {
   }
 }
 
-module.exports = { insertUser, getUser, validateDuplicate, insertAsset, insertAsset }
+module.exports = { insertUser, getUser, validateDuplicate, insertAsset, insertAsset, getUserAssets }
