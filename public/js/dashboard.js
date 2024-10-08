@@ -10,19 +10,113 @@ const confirmAddCase = document.getElementById('confirmAddCase')
 const startDate = document.getElementById('startDate')
 const count = document.getElementById('count')
 const userName = document.getElementById('userName')
+const table = document.getElementById('table')
 const cookie = Object.fromEntries(document.cookie.split('; ').map(v=>v.split(/=(.*)/s).map(decodeURIComponent)))
+
+const urlAssetInsert = 'http://localhost:3000/asset/insert'
+const urlGetUserAssets = 'http://localhost:3000/asset/getUserAssets'
 
 let toggle = true
 let url = 'https://steamcommunity.com/market/pricehistory/?country=us&currency=3&appid=730&market_hash_name=Kilowatt%20Case'
-const urlAssetInsert = 'http://localhost:3000/asset/insert'
 let caseValid = false
 let countValid = false
 let assetType
 
 startDate.value = new Date().toISOString().substring(0, 10)
 
-const setWelcomeText = () =>{
+const setWelcomeText = () => {
     userName.innerHTML = cookie.username
+}
+
+const getCaseImg = (caseName) => {
+    let result
+    fetch('../img/items/cases/data.json')
+    .then(response => response.json())
+    .then(data => {
+        for (let i = 0; i < Object.values(data).length; i++) {
+            if (caseName === Object.values(data)[i].case_name) {
+                result = Object.values(data)[i].case_name
+                break
+            }
+        }          
+    }).catch(error => console.log(error))
+    return result
+}
+
+const createTableRow = (caseName, dateBought, caseCount) => {
+    const tr = document.createElement('tr')
+    const th = document.createElement('th')
+    th.setAttribute('scope', 'row')
+    const img = document.createElement('img')
+    img.src = '../img/logo/chodec_modern_minimalist_logo_vector_fire_format_letter_C_insid_cfc364db-6b2b-4897-97ec-c029ce4194a3.png'
+    img.classList.add('caseSmall')
+    img.alt = ''
+    th.appendChild(img)
+    tr.appendChild(th)
+  
+    const tdName = document.createElement('td')
+    tdName.textContent = 'Bravo'
+    tr.appendChild(tdName)
+  
+    const tdDate = document.createElement('td')
+    tdDate.textContent = '24. 12. 2004'
+    tr.appendChild(tdDate)
+  
+    const tdCount = document.createElement('td')
+    
+    const spanCount = document.createElement('span')
+    spanCount.classList.add('caseCount')
+    spanCount.textContent = '20'
+    
+    const spanEdit = document.createElement('span')
+    spanEdit.classList.add('caseCountEdit')
+  
+    const penIcon = document.createElement('i')
+    penIcon.classList.add('fa-regular', 'fa-pen-to-square')
+  
+    const trashIcon = document.createElement('i')
+    trashIcon.classList.add('fa-regular', 'fa-trash-can')
+  
+    spanEdit.appendChild(penIcon)
+    spanEdit.appendChild(trashIcon)
+  
+    tdCount.appendChild(spanCount)
+    tdCount.appendChild(spanEdit)
+  
+    tr.appendChild(tdCount)
+  
+    return tr
+  }
+
+const loadCases = () => {
+    fetch(urlGetUserAssets, {
+        method: "POST",
+        body: new URLSearchParams({
+          email: cookie.email
+        }),
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded"
+        },
+        credentials: "include"
+        })
+      .then((res) => {
+        if (res.status === 200) {
+            if (res.status !== 200) {
+                throw "failed"
+            }
+            return res.json()
+        }
+        throw "failed"
+      })
+      .then((data) => {
+        getCaseImg('Kilowatt%20Case')
+        // for (let i = 0; i < data.length; i++) {
+        //     console.log(data[i].asset_name, data[i].bought_date, data[i].asset_count)
+        // }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
 }
 
 const toggleNav = () => {
@@ -178,6 +272,8 @@ confirmAddCase.addEventListener('click', (e) => {
 count.addEventListener('keyup', countHandler)
 count.addEventListener('click', countHandler)
 setWelcomeText()
+loadCases()
+getCaseImg('Kilowatt%20Case')
 
 //Vyvoj ceny na marketu konkretniho itemu
 //https://steamcommunity.com/market/pricehistory/?country=CZ&currency=3&appid=730&market_hash_name=P250%20%7C%20Cartel%20%28Battle-Scarred%29
