@@ -11,6 +11,7 @@ const startDate = document.getElementById('startDate')
 const count = document.getElementById('count')
 const userName = document.getElementById('userName')
 const table = document.getElementById('table')
+const tableFirstChild = document.getElementById('tableFirstChild')
 const cookie = Object.fromEntries(document.cookie.split('; ').map(v=>v.split(/=(.*)/s).map(decodeURIComponent)))
 
 const urlAssetInsert = 'http://localhost:3000/asset/insert'
@@ -29,55 +30,56 @@ const setWelcomeText = () => {
 }
 
 const getCaseImg = (caseName) => {
-    let result
-    fetch('../img/items/cases/data.json')
-    .then(response => response.json())
-    .then(data => {
-        for (let i = 0; i < Object.values(data).length; i++) {
-            if (caseName === Object.values(data)[i].case_name) {
-                result = Object.values(data)[i].case_name
-                break
+    let arr = []
+    return fetch('../img/items/cases/data.json')
+        .then(response => response.json())
+        .then(data => {
+            for (let i = 0; i < Object.values(data).length; i++) {
+                if (caseName === Object.values(data)[i].case_name) {
+                    arr.push(Object.values(data)[i].case_name)
+                    arr.push(Object.values(data)[i].image_url)
+                    return arr
+                }
             }
-        }          
-    }).catch(error => console.log(error))
-    return result
+            return null
+        })
+        .catch(error => {
+            console.log(error)
+            return null
+        })
 }
 
-const createTableRow = (caseName, dateBought, caseCount) => {
+const createTableRow = (caseName, caseImg, dateBought, caseCount) => {
     const tr = document.createElement('tr')
     const th = document.createElement('th')
     th.setAttribute('scope', 'row')
     const img = document.createElement('img')
-    img.src = '../img/logo/chodec_modern_minimalist_logo_vector_fire_format_letter_C_insid_cfc364db-6b2b-4897-97ec-c029ce4194a3.png'
+    img.src = caseImg
     img.classList.add('caseSmall')
     img.alt = ''
     th.appendChild(img)
     tr.appendChild(th)
   
     const tdName = document.createElement('td')
-    tdName.textContent = 'Bravo'
+    tdName.textContent = editCaseName(caseName)
     tr.appendChild(tdName)
   
     const tdDate = document.createElement('td')
-    tdDate.textContent = '24. 12. 2004'
+    tdDate.textContent = dateBought
     tr.appendChild(tdDate)
   
     const tdCount = document.createElement('td')
     
     const spanCount = document.createElement('span')
     spanCount.classList.add('caseCount')
-    spanCount.textContent = '20'
+    spanCount.textContent = caseCount
     
     const spanEdit = document.createElement('span')
     spanEdit.classList.add('caseCountEdit')
   
-    const penIcon = document.createElement('i')
-    penIcon.classList.add('fa-regular', 'fa-pen-to-square')
-  
     const trashIcon = document.createElement('i')
     trashIcon.classList.add('fa-regular', 'fa-trash-can')
   
-    spanEdit.appendChild(penIcon)
     spanEdit.appendChild(trashIcon)
   
     tdCount.appendChild(spanCount)
@@ -98,25 +100,24 @@ const loadCases = () => {
           "Content-type": "application/x-www-form-urlencoded"
         },
         credentials: "include"
-        })
-      .then((res) => {
+    })
+    .then((res) => {
         if (res.status === 200) {
-            if (res.status !== 200) {
-                throw "failed"
-            }
             return res.json()
         }
         throw "failed"
-      })
-      .then((data) => {
-        getCaseImg('Kilowatt%20Case')
-        // for (let i = 0; i < data.length; i++) {
-        //     console.log(data[i].asset_name, data[i].bought_date, data[i].asset_count)
-        // }
-      })
-      .catch((err) => {
+    })
+    .then((data) => {
+            for (let i = 0; i < data.length; i++) {
+                getCaseImg(data[i].asset_name).then(res => {
+                    let newRow = createTableRow(res[0],res[1], data[i].bought_date, data[i].asset_count)
+                    table.insertBefore(newRow, tableFirstChild)
+                })
+            }
+    })
+    .catch((err) => {
         console.log(err)
-      })
+    })
 }
 
 const toggleNav = () => {
@@ -264,6 +265,7 @@ confirmAddCase.addEventListener('click', (e) => {
       })
       .then((data) => {
         console.log(data)
+        loadCases()
       })
       .catch((err) => {
         console.log(err)
@@ -273,7 +275,7 @@ count.addEventListener('keyup', countHandler)
 count.addEventListener('click', countHandler)
 setWelcomeText()
 loadCases()
-getCaseImg('Kilowatt%20Case')
+
 
 //Vyvoj ceny na marketu konkretniho itemu
 //https://steamcommunity.com/market/pricehistory/?country=CZ&currency=3&appid=730&market_hash_name=P250%20%7C%20Cartel%20%28Battle-Scarred%29
