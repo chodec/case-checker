@@ -49,6 +49,16 @@ const getCaseImg = (caseName) => {
         })
 }
 
+const refreshTable = () => {
+    const table = document.getElementById('table')
+    const rows = table.getElementsByTagName('tr')
+    
+    for (let i = rows.length - 1; i >= 0; i--) {
+        if (rows[i].id !== 'tableFirstChild') {
+            rows[i].remove()
+        }
+    }
+}
 const createTableRow = (caseName, caseImg, dateBought, caseCount) => {
     const tr = document.createElement('tr')
     const th = document.createElement('th')
@@ -108,12 +118,12 @@ const loadCases = () => {
         throw "failed"
     })
     .then((data) => {
-            for (let i = 0; i < data.length; i++) {
-                getCaseImg(data[i].asset_name).then(res => {
-                    let newRow = createTableRow(res[0],res[1], data[i].bought_date, data[i].asset_count)
-                    table.insertBefore(newRow, tableFirstChild)
-                })
-            }
+        for (let i = 0; i < data.length; i++) {
+            getCaseImg(data[i].asset_name).then(res => {
+                let newRow = createTableRow(res[0],res[1], data[i].bought_date, data[i].asset_count)
+                table.insertBefore(newRow, tableFirstChild)
+            })
+        }
     })
     .catch((err) => {
         console.log(err)
@@ -235,10 +245,6 @@ const setAssetType = (assetName) => {
 
 confirmAddCase.addEventListener('click', (e) => {
     e.preventDefault()
-    console.log(dropdownMenuButton.name)
-    console.log(count.value)
-    console.log(startDate.value)
-    console.log(cookie.email)
     setAssetType(dropdownMenuButton.name)
     fetch(urlAssetInsert, {
         method: "POST",
@@ -259,13 +265,14 @@ confirmAddCase.addEventListener('click', (e) => {
             if (res.status !== 200) {
                 throw "failed"
             }
+            refreshTable()
+            loadCases()
             return res.json()
         }
         throw "failed"
       })
       .then((data) => {
         console.log(data)
-        loadCases()
       })
       .catch((err) => {
         console.log(err)
