@@ -13,9 +13,11 @@ const userName = document.getElementById('userName')
 const table = document.getElementById('table')
 const tableFirstChild = document.getElementById('tableFirstChild')
 const cookie = Object.fromEntries(document.cookie.split('; ').map(v=>v.split(/=(.*)/s).map(decodeURIComponent)))
+const paginationContainer = document.querySelector(".pagination");
 
 const urlAssetInsert = 'http://localhost:3000/asset/insert'
 const urlGetUserAssets = 'http://localhost:3000/asset/getUserAssets'
+const itemsPerPage = 10
 
 let toggle = true
 let url = 'https://steamcommunity.com/market/pricehistory/?country=us&currency=3&appid=730&market_hash_name=Kilowatt%20Case'
@@ -110,11 +112,13 @@ const createTableRow = (caseName, caseImg, dateBought, caseCount) => {
     return tr
   }
 
-const loadCases = () => {
+  const loadCases = (offset = 0, limit = itemsPerPage) => {
     fetch(urlGetUserAssets, {
         method: "POST",
         body: new URLSearchParams({
-          email: cookie.email
+          email: cookie.email,
+          limit: limit,
+          offset: offset
         }),
         headers: {
           "Content-type": "application/x-www-form-urlencoded"
@@ -123,22 +127,24 @@ const loadCases = () => {
     })
     .then((res) => {
         if (res.status === 200) {
-            return res.json()
+            return res.json();
         }
-        throw "failed"
+        throw "failed";
     })
     .then((data) => {
+        refreshTable(); // Clear the table before loading new data
         for (let i = 0; i < data.length; i++) {
             getCaseImg(data[i].asset_name).then(res => {
-                let newRow = createTableRow(res[0],res[1], data[i].bought_date, data[i].asset_count)
-                table.insertBefore(newRow, tableFirstChild)
-            })
+                let newRow = createTableRow(res[0], res[1], data[i].bought_date, data[i].asset_count);
+                table.insertBefore(newRow, tableFirstChild);
+            });
         }
     })
     .catch((err) => {
-        console.log(err)
-    })
-}
+        console.log(err);
+    });
+};
+
 
 const toggleNav = () => {
     if (toggle) {
@@ -239,6 +245,42 @@ const countHandler = () => {
         formValid()
     }
 }
+const createPagination = async () => {
+    const totalAssets = await fetchTotalAssetsCount();
+    const pageCount = Math.ceil(totalAssets / itemsPerPage); // Calculate the number of pages
+    paginationContainer.innerHTML = ''; // Clear existing pagination
+
+    // Create pagination items
+    for (let i = 1; i <= pageCount; i++) {
+        const pageItem = document.createElement('li');
+        pageItem.classList.add('page-item');
+        if (i === 1) pageItem.classList.add('active'); // Set the first page as active
+
+        const pageLink = document.createElement('a');
+        pageLink.classList.add('page-link');
+        pageLink.href = '#';
+        pageLink.innerText = i;
+
+        // Add click event listener for pagination
+        pageLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            setPage(i);
+        });
+
+        pageItem.appendChild(pageLink);
+        paginationContainer.appendChild(pageItem);
+    }
+};
+
+const setPage = (pageNumber) => {
+    const offset = (pageNumber - 1) * itemsPerPage; // Calculate offset for the page
+    loadCases(offset, itemsPerPage); // Load cases for the specified page and offset
+
+    // Update active class on pagination items
+    const pageItems = paginationContainer.querySelectorAll('.page-item');
+    pageItems.forEach(item => item.classList.remove('active'));
+    pageItems[pageNumber - 1].classList.add('active');
+}
 
 openModal.addEventListener('click', (e) =>{
     e.preventDefault()
@@ -252,6 +294,22 @@ const setAssetType = (assetName) => {
         assetType = 'case'
     }
 }
+
+const fetchTotalAssetsCount = () => {
+    return fetch('/asset/countUserAssets', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: cookie.email }) // Pass the user email
+    })
+    .then(response => response.json())
+    .then(data => data.total_assets)
+    .catch(error => {
+        console.error('Error fetching assets count:', error);
+        return 0;
+    });
+};
 
 confirmAddCase.addEventListener('click', (e) => {
     e.preventDefault()
@@ -288,11 +346,16 @@ confirmAddCase.addEventListener('click', (e) => {
         console.log(err)
       })
 })
+
+const initializePagination = () => {
+    createPagination()
+    loadCases()
+}
+
 count.addEventListener('keyup', countHandler)
 count.addEventListener('click', countHandler)
 setWelcomeText()
-loadCases()
-
+initializePagination()
 
 //Vyvoj ceny na marketu konkretniho itemu
 //https://steamcommunity.com/market/pricehistory/?country=CZ&currency=3&appid=730&market_hash_name=P250%20%7C%20Cartel%20%28Battle-Scarred%29

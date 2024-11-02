@@ -10,6 +10,7 @@ const loginRouter = require('./routes/login.js')
 const steamApi = require('./routes/steamApi.js')
 const insertAsset = require('./routes/insertAsset.js')
 const getUserAssets = require('./routes/getUserAssets.js')
+const countUserAssets = require('./routes/countUserAssets.js')
 const session = require('express-session')
 
 const app = express()
@@ -22,17 +23,17 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 app.use(express.static(fePath + '/public'))
 
-//Setup session
 app.use(sessionsMiddleware)
-//Setup routes
+
 app.use(validateRouter)
 app.use(registerRouter)
 app.use(loginRouter)
 app.use(steamApi)
 app.use(insertAsset)
 app.use(getUserAssets)
+app.use(countUserAssets)
 
-//Check user session
+
 const requireAuth = (req, res, next) => {
   if (req.session.userId) {
       next()

@@ -102,4 +102,22 @@ const getUserAssets = async (email, limit = 10, offset = 0) => {
   }
 }
 
-module.exports = { insertUser, getUser, validateDuplicate, insertAsset, insertAsset, getUserAssets }
+const countUserAssets = async (email) => {
+  const client = await pool.connect()
+  try {
+    const result = await client.query(
+      `SELECT COUNT(*) AS total_assets 
+       FROM assets 
+       WHERE user_id=(SELECT id FROM users WHERE email = $1)`,
+      [email]
+    )
+    return result.rows[0].total_assets
+  } catch (error) {
+    console.error(error.stack)
+    return false
+  } finally {
+    client.release()
+  }
+}
+
+module.exports = { insertUser, getUser, validateDuplicate, insertAsset, insertAsset, getUserAssets, countUserAssets }

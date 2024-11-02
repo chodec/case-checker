@@ -199,3 +199,13 @@ img.caseSmall {
     overflow: hidden;
     text-overflow: ellipsis; 
 }
+
+.page-link{ 
+    background-color: transparent;
+    border: none;
+    color: #e38716;
+}
+
+.pagination .page-item.disabled .page-link {
+    --bs-pagination-disabled-bg: transparent;
+  }
