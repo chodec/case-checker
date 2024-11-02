@@ -120,4 +120,20 @@ const countUserAssets = async (email) => {
   }
 }
 
-module.exports = { insertUser, getUser, validateDuplicate, insertAsset, insertAsset, getUserAssets, countUserAssets }
+const deleteUserAsset = async (assetId) => {
+  const client = await pool.connect()
+  try {
+      const result = await client.query(
+          `DELETE FROM assets WHERE id = $1 RETURNING *`,
+          [assetId]
+      )
+      return result.rowCount > 0
+  } catch (error) {
+      console.error(error.stack)
+      return false
+  } finally {
+      client.release()
+  }
+}
+
+module.exports = { insertUser, getUser, validateDuplicate, insertAsset, insertAsset, getUserAssets, countUserAssets, deleteUserAsset }

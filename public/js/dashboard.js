@@ -72,7 +72,7 @@ const transformDate = (dateString) => {
     return `${day}. ${month}. ${year}`
 }
 
-const createTableRow = (caseName, caseImg, dateBought, caseCount) => {
+const createTableRow = (caseName, caseImg, dateBought, caseCount, assetId) => {
     const tr = document.createElement('tr')
     const th = document.createElement('th')
     th.setAttribute('scope', 'row')
@@ -102,7 +102,10 @@ const createTableRow = (caseName, caseImg, dateBought, caseCount) => {
   
     const trashIcon = document.createElement('i')
     trashIcon.classList.add('fa-regular', 'fa-trash-can')
-  
+    trashIcon.dataset.assetId = assetId 
+
+    trashIcon.addEventListener('click', deleteAsset)
+
     spanEdit.appendChild(trashIcon)
   
     tdCount.appendChild(spanCount)
@@ -111,9 +114,30 @@ const createTableRow = (caseName, caseImg, dateBought, caseCount) => {
     tr.appendChild(tdCount)
   
     return tr
-  }
+}
 
-  const loadCases = (offset = 0, limit = itemsPerPage) => {
+const deleteAsset = (e) => {
+    const assetId = e.target.dataset.assetId
+
+    fetch(`/asset/deleteUserAsset`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ assetId })
+    })
+    .then(response => {
+        if (response.ok) {
+            initializePagination(currentPage)
+        } else {
+            console.error('Failed to delete asset')
+        }
+    })
+    .catch(error => console.error('Error deleting asset:', error))
+}
+
+
+const loadCases = (offset = 0, limit = itemsPerPage) => {
     fetch(urlGetUserAssets, {
         method: "POST",
         body: new URLSearchParams({
@@ -128,26 +152,27 @@ const createTableRow = (caseName, caseImg, dateBought, caseCount) => {
     })
     .then((res) => {
         if (res.status === 200) {
-            return res.text() 
+            return res.json() 
         }
         throw "failed to fetch user assets"
     })
-    .then((data) => {
-        try {
-            const jsonData = JSON.parse(data) 
-            refreshTable()
-            for (let i = 0; i < jsonData.length; i++) {
-                getCaseImg(jsonData[i].asset_name).then(res => {
-                    if (res) {
-                        let newRow = createTableRow(res[0], res[1], jsonData[i].bought_date, jsonData[i].asset_count)
-                        table.insertBefore(newRow, tableFirstChild)
-                    } else {
-                        console.error('Image not found for case:', jsonData[i].asset_name)
-                    }
-                })
-            }
-        } catch (error) {
-            console.error('Error parsing JSON:', error)
+    .then((jsonData) => {
+        refreshTable()
+        for (let i = 0; i < jsonData.length; i++) {
+            getCaseImg(jsonData[i].asset_name).then(res => {
+                if (res) {
+                    let newRow = createTableRow(
+                        jsonData[i].asset_name, 
+                        res[1], 
+                        jsonData[i].bought_date, 
+                        jsonData[i].asset_count, 
+                        jsonData[i].id
+                    )
+                    table.insertBefore(newRow, tableFirstChild)
+                } else {
+                    console.error('Image not found for case:', jsonData[i].asset_name)
+                }
+            })
         }
     })
     .catch((err) => {
@@ -361,7 +386,6 @@ confirmAddCase.addEventListener('click', (e) => {
         throw new Error("Failed to insert asset")
     })
     .then((data) => {
-        console.log('Parsed JSON response:', data) 
         initializePagination(currentPage) 
     })
     .catch((err) => {

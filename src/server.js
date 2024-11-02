@@ -11,6 +11,7 @@ const steamApi = require('./routes/steamApi.js')
 const insertAsset = require('./routes/insertAsset.js')
 const getUserAssets = require('./routes/getUserAssets.js')
 const countUserAssets = require('./routes/countUserAssets.js')
+const deleteUserAsset = require('./routes/deleteUserAsset.js')
 const session = require('express-session')
 
 const app = express()
@@ -32,6 +33,7 @@ app.use(steamApi)
 app.use(insertAsset)
 app.use(getUserAssets)
 app.use(countUserAssets)
+app.use(deleteUserAsset)
 
 
 const requireAuth = (req, res, next) => {
