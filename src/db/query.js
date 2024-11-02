@@ -84,16 +84,16 @@ const insertAsset = async (email, asset_type, asset_name, asset_count, bought_da
     client.release()
   }
 }
-
-const getUserAssets = async (email) => {
+const getUserAssets = async (email, limit = 10, offset = 0) => {
   const client = await pool.connect()
   try {
     const userData = await client.query(
       `SELECT * FROM assets 
-              WHERE user_id=(SELECT id FROM users WHERE email = $1)`,
-      [email]
+              WHERE user_id=(SELECT id FROM users WHERE email = $1)
+              LIMIT $2 OFFSET $3`,
+      [email, limit, offset]
     )
-    return userData
+    return userData.rows
   } catch (error) {
     console.error(error.stack)
     return false
