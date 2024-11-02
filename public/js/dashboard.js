@@ -13,12 +13,13 @@ const userName = document.getElementById('userName')
 const table = document.getElementById('table')
 const tableFirstChild = document.getElementById('tableFirstChild')
 const cookie = Object.fromEntries(document.cookie.split('; ').map(v=>v.split(/=(.*)/s).map(decodeURIComponent)))
-const paginationContainer = document.querySelector(".pagination");
+const paginationContainer = document.querySelector(".pagination")
 
 const urlAssetInsert = 'http://localhost:3000/asset/insert'
 const urlGetUserAssets = 'http://localhost:3000/asset/getUserAssets'
 const itemsPerPage = 10
 
+let currentPage = 1
 let toggle = true
 let url = 'https://steamcommunity.com/market/pricehistory/?country=us&currency=3&appid=730&market_hash_name=Kilowatt%20Case'
 let caseValid = false
@@ -127,23 +128,32 @@ const createTableRow = (caseName, caseImg, dateBought, caseCount) => {
     })
     .then((res) => {
         if (res.status === 200) {
-            return res.json();
+            return res.text() 
         }
-        throw "failed";
+        throw "failed to fetch user assets"
     })
     .then((data) => {
-        refreshTable(); // Clear the table before loading new data
-        for (let i = 0; i < data.length; i++) {
-            getCaseImg(data[i].asset_name).then(res => {
-                let newRow = createTableRow(res[0], res[1], data[i].bought_date, data[i].asset_count);
-                table.insertBefore(newRow, tableFirstChild);
-            });
+        try {
+            const jsonData = JSON.parse(data) 
+            refreshTable()
+            for (let i = 0; i < jsonData.length; i++) {
+                getCaseImg(jsonData[i].asset_name).then(res => {
+                    if (res) {
+                        let newRow = createTableRow(res[0], res[1], jsonData[i].bought_date, jsonData[i].asset_count)
+                        table.insertBefore(newRow, tableFirstChild)
+                    } else {
+                        console.error('Image not found for case:', jsonData[i].asset_name)
+                    }
+                })
+            }
+        } catch (error) {
+            console.error('Error parsing JSON:', error)
         }
     })
     .catch((err) => {
-        console.log(err);
-    });
-};
+        console.error('Error loading cases:', err)
+    })
+}
 
 
 const toggleNav = () => {
@@ -246,40 +256,46 @@ const countHandler = () => {
     }
 }
 const createPagination = async () => {
-    const totalAssets = await fetchTotalAssetsCount();
-    const pageCount = Math.ceil(totalAssets / itemsPerPage); // Calculate the number of pages
-    paginationContainer.innerHTML = ''; // Clear existing pagination
+    const totalAssets = await fetchTotalAssetsCount()
+    const pageCount = Math.ceil(totalAssets / itemsPerPage)
+    paginationContainer.innerHTML = ''
 
-    // Create pagination items
     for (let i = 1; i <= pageCount; i++) {
-        const pageItem = document.createElement('li');
-        pageItem.classList.add('page-item');
-        if (i === 1) pageItem.classList.add('active'); // Set the first page as active
+        const pageItem = document.createElement('li')
+        pageItem.classList.add('page-item')
+        if (i === 1) pageItem.classList.add('active')
 
-        const pageLink = document.createElement('a');
-        pageLink.classList.add('page-link');
-        pageLink.href = '#';
-        pageLink.innerText = i;
+        const pageLink = document.createElement('a')
+        pageLink.classList.add('page-link')
+        pageLink.href = '#'
+        pageLink.innerText = i
 
-        // Add click event listener for pagination
         pageLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            setPage(i);
-        });
+            e.preventDefault()
+            setPage(i)
+        })
 
-        pageItem.appendChild(pageLink);
-        paginationContainer.appendChild(pageItem);
+        pageItem.appendChild(pageLink)
+        paginationContainer.appendChild(pageItem)
     }
-};
+}
 
 const setPage = (pageNumber) => {
-    const offset = (pageNumber - 1) * itemsPerPage; // Calculate offset for the page
-    loadCases(offset, itemsPerPage); // Load cases for the specified page and offset
+    const offset = (pageNumber - 1) * itemsPerPage
+    loadCases(offset, itemsPerPage)
+    setActivePage(pageNumber)
+    currentPage = pageNumber 
+}
 
-    // Update active class on pagination items
-    const pageItems = paginationContainer.querySelectorAll('.page-item');
-    pageItems.forEach(item => item.classList.remove('active'));
-    pageItems[pageNumber - 1].classList.add('active');
+const setActivePage = (pageNumber) => {
+    const pageItems = paginationContainer.querySelectorAll('.page-item')
+    pageItems.forEach((item, index) => {
+        if (index + 1 === pageNumber) {
+            item.classList.add('active')
+        } else {
+            item.classList.remove('active')
+        }
+    })
 }
 
 openModal.addEventListener('click', (e) =>{
@@ -301,19 +317,29 @@ const fetchTotalAssetsCount = () => {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email: cookie.email }) // Pass the user email
+        body: JSON.stringify({ email: cookie.email })
     })
     .then(response => response.json())
     .then(data => data.total_assets)
     .catch(error => {
-        console.error('Error fetching assets count:', error);
-        return 0;
-    });
-};
+        console.error('Error fetching assets count:', error)
+        return 0
+    })
+}
+
+const initializePagination = (pageNumber = 1) => {
+    paginationContainer.innerHTML = ''
+    createPagination()
+    const offset = (pageNumber - 1) * itemsPerPage
+    loadCases(offset, itemsPerPage)
+    setActivePage(pageNumber)
+    currentPage = pageNumber
+}
 
 confirmAddCase.addEventListener('click', (e) => {
     e.preventDefault()
     setAssetType(dropdownMenuButton.name)
+    
     fetch(urlAssetInsert, {
         method: "POST",
         body: new URLSearchParams({
@@ -327,30 +353,21 @@ confirmAddCase.addEventListener('click', (e) => {
           "Content-type": "application/x-www-form-urlencoded"
         },
         credentials: "include"
-        })
-      .then((res) => {
+    })
+    .then((res) => {
         if (res.status === 200) {
-            if (res.status !== 200) {
-                throw "failed"
-            }
-            refreshTable()
-            loadCases()
             return res.json()
         }
-        throw "failed"
-      })
-      .then((data) => {
-        console.log(data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+        throw new Error("Failed to insert asset")
+    })
+    .then((data) => {
+        console.log('Parsed JSON response:', data) 
+        initializePagination(currentPage) 
+    })
+    .catch((err) => {
+        console.error('Error in confirmAddCase:', err)
+    })
 })
-
-const initializePagination = () => {
-    createPagination()
-    loadCases()
-}
 
 count.addEventListener('keyup', countHandler)
 count.addEventListener('click', countHandler)

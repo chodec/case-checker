@@ -204,8 +204,27 @@ img.caseSmall {
     background-color: transparent;
     border: none;
     color: #e38716;
+    cursor: pointer;
 }
 
+.page-link:hover{
+    background-color: transparent;
+    color: #e38716;
+    scale: 1.4;
+}
+
+.pagination .page-link:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
 .pagination .page-item.disabled .page-link {
     --bs-pagination-disabled-bg: transparent;
+  }
+
+  .active>.page-link, .page-link.active{
+    background-color: transparent;
+    color: gray;
+    cursor: default;
+    border-color: none;  
   }
