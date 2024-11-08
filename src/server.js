@@ -30,11 +30,11 @@ app.use(validateRouter)
 app.use(registerRouter)
 app.use(loginRouter)
 
-app.use('/asset/insert', verifyToken, insertAsset)
-app.use('/asset/getUserAssets', verifyToken, getUserAssets)
-app.use('/asset/countUserAssets', verifyToken, countUserAssets)
-app.use('/asset/delete', verifyToken, deleteUserAsset)
-app.use('/asset/portfolioPerformance', verifyToken, portfolioPerformance)
+app.use('/asset', verifyToken, getUserAssets)
+app.use('/asset', verifyToken, countUserAssets)
+app.use('/asset', verifyToken, deleteUserAsset)
+app.use('/asset', verifyToken, portfolioPerformance)
+app.use('/asset', verifyToken, insertAsset)
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(fePath, '/public/html/index.html'))

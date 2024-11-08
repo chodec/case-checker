@@ -4,8 +4,7 @@ const { insertAsset } = require('../db/query.js')
 const { verifyToken } = require('../middlewares/auth.js')
 const router = express.Router()
 
-//Create asset and insert him into DB
-router.post('/asset/insert', verifyToken, (req, res) => {
+router.post('/insert', verifyToken, (req, res) => {
     const data = req.body
     const assetId = uuidv4()
 

@@ -3,7 +3,7 @@ const { getUserAssets } = require('../db/query.js')
 const { verifyToken } = require('../middlewares/auth.js')
 const router = express.Router()
 
-router.post('/asset/getUserAssets', verifyToken, (req, res) => {
+router.post('/getUserAssets', verifyToken, (req, res) => {
     const { email, limit = 10, offset = 0 } = req.body
 
     getUserAssets(email, limit, offset)

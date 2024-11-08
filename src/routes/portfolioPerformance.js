@@ -72,7 +72,7 @@ async function calculatePortfolioPerformance(assets) {
   return totalPerformance
 }
 
-router.post('/asset/portfolioPerformance', verifyToken, async (req, res) => {
+router.post('/portfolioPerformance', verifyToken, async (req, res) => {
   const { email } = req.body
   try {
     const assets = await getUserAssets(email)

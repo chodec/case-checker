@@ -6,7 +6,6 @@ const router = express.Router()
 
 const saltRounds = 10
 
-//Create user and insert him into DB with secure password
 router.post('/account/register', (req, res) => {
     const data = req.body
     validateDuplicate(data.email).then(result => {
