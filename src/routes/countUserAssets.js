@@ -1,8 +1,9 @@
 const express = require('express')
 const { countUserAssets } = require('../db/query.js')
+const { verifyToken } = require('../middlewares/auth.js')
 const router = express.Router()
 
-router.post('/asset/countUserAssets', (req, res) => {
+router.post('/asset/countUserAssets', verifyToken,(req, res) => {
     const { email } = req.body
 
     countUserAssets(email)

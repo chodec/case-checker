@@ -1,6 +1,7 @@
 const express = require('express')
 const axios = require('axios')
 const { getUserAssets } = require('../db/query.js')
+const { verifyToken } = require('../middlewares/auth.js')
 const router = express.Router()
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -71,7 +72,7 @@ async function calculatePortfolioPerformance(assets) {
   return totalPerformance
 }
 
-router.post('/asset/portfolioPerformance', async (req, res) => {
+router.post('/asset/portfolioPerformance', verifyToken, async (req, res) => {
   const { email } = req.body
   try {
     const assets = await getUserAssets(email)

@@ -1,8 +1,9 @@
 const express = require('express')
 const { deleteUserAsset } = require('../db/query.js')
+const { verifyToken } = require('../middlewares/auth.js')
 const router = express.Router()
 
-router.delete('/asset/deleteUserAsset', (req, res) => {
+router.delete('/asset/deleteUserAsset', verifyToken, (req, res) => {
     const { assetId } = req.body
 
     deleteUserAsset(assetId)
