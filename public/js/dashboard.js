@@ -18,6 +18,11 @@ const paginationContainer = document.querySelector(".pagination")
 const urlAssetInsert = 'http://localhost:3000/asset/insert'
 const urlGetUserAssets = 'http://localhost:3000/asset/getUserAssets'
 const itemsPerPage = 10
+const token = localStorage.getItem('token')
+if (!token) {
+  window.location.href = '/login'
+}
+console.log(localStorage.getItem('token'))
 
 let currentPage = 1
 let toggle = true
@@ -122,13 +127,17 @@ const deleteAsset = (e) => {
     fetch(`/asset/deleteUserAsset`, {
         method: 'DELETE',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ assetId })
     })
     .then(response => {
         if (response.ok) {
             initializePagination(currentPage)
+        } else if (response.status === 401) {
+            alert('Session expired. Please log in again.')
+            window.location.href = 'http://localhost:3000/login'
         } else {
             console.error('Failed to delete asset')
         }
@@ -141,12 +150,13 @@ const loadCases = (offset = 0, limit = itemsPerPage) => {
     fetch(urlGetUserAssets, {
         method: "POST",
         body: new URLSearchParams({
-          email: cookie.email,
-          limit: limit,
-          offset: offset
+            email: cookie.email,
+            limit: limit,
+            offset: offset
         }),
         headers: {
-          "Content-type": "application/x-www-form-urlencoded"
+            "Content-type": "application/x-www-form-urlencoded",
+            "Authorization": `Bearer ${token}`  
         },
         credentials: "include"
     })
@@ -340,7 +350,8 @@ const fetchTotalAssetsCount = () => {
     return fetch('/asset/countUserAssets', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify({ email: cookie.email })
     })
@@ -368,14 +379,15 @@ confirmAddCase.addEventListener('click', (e) => {
     fetch(urlAssetInsert, {
         method: "POST",
         body: new URLSearchParams({
-          email: cookie.email,
-          asset_name: dropdownMenuButton.name,
-          bought_date: startDate.value,
-          asset_count: count.value,
-          asset_type: assetType
+            email: cookie.email,
+            asset_name: dropdownMenuButton.name,
+            bought_date: startDate.value,
+            asset_count: count.value,
+            asset_type: assetType
         }),
         headers: {
-          "Content-type": "application/x-www-form-urlencoded"
+            "Content-type": "application/x-www-form-urlencoded",
+            "Authorization": `Bearer ${token}`
         },
         credentials: "include"
     })
@@ -391,7 +403,7 @@ confirmAddCase.addEventListener('click', (e) => {
     .catch((err) => {
         console.error('Error in confirmAddCase:', err)
     })
-})
+})    
 
 count.addEventListener('keyup', countHandler)
 count.addEventListener('click', countHandler)

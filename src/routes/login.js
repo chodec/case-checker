@@ -8,6 +8,7 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 
 router.post('/account/login', (req, res) => {
     const data = req.body
+
     getUser(data.email, data.password)
         .then(result => {
             if (result.rows.length === 0) {
@@ -15,6 +16,7 @@ router.post('/account/login', (req, res) => {
             }
 
             const userData = result
+
             bcrypt.compare(data.password, userData.rows[0].pass, (err, match) => {
                 if (err) {
                     console.error(err)

@@ -1,23 +1,24 @@
-// src/middlewares/auth.js
 const jwt = require('jsonwebtoken')
-const dotenv = require('dotenv')
-
-dotenv.config()
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 
 const verifyToken = (req, res, next) => {
-  const token = req.headers['authorization']
-  if (!token) {
-    return res.status(403).json({ message: 'No token provided' })
+  const authHeader = req.headers['authorization']
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(403).json({ message: 'No token provided or invalid format' })
   }
 
-  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+  const token = authHeader.split(' ')[1] // Extract the token after "Bearer "
+
+  jwt.verify(token, JWT_SECRET_KEY, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ message: 'Failed to authenticate token' })
+      console.error('Token verification error:', err)
+      return res.status(403).json({ message: 'Invalid token' })
     }
 
-    req.userId = decoded.id
+    req.user = decoded // Attach decoded user info if needed
     next()
   })
 }
 
-module.exports = { verifyToken } 
+module.exports = { verifyToken }

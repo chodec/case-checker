@@ -15,7 +15,6 @@ const xhttp = new XMLHttpRequest()
 
 const urlLogin = 'http://localhost:3000/account/login'
 
-//Change input CSS if fail or success
 const changeBorder =  (dom, domHelper, status) => {
     if (status === 'failed') {
         dom.style.borderColor = "red"
@@ -30,17 +29,14 @@ const changeBorder =  (dom, domHelper, status) => {
     }
 }
 
-//Check if email has right pattern
 const emailHandler = () => {
     email.value.match(emailPattern) ? emailValid = true : emailValid = false
 }
 
-//Check if password has right pattern
 const passwordHandler = () => {
     password.value.match(passwordPattern) ?  passValid = true : passValid = false
 }
 
-//Show or Hide users given password
 const showHide = () => {
     if (iconShow.classList.contains('hidden')) {
         iconHide.classList.add('hidden')
@@ -53,7 +49,6 @@ const showHide = () => {
     }
 }
 
-//Check if user fill every input value
 const validateForm = () => {
     if(email.value.match(emailPattern) && password.value.match(passwordPattern)){
         button.disabled = false
@@ -62,7 +57,6 @@ const validateForm = () => {
     }
 }
 
-//Check if user fill every input value
 elArr.forEach((element) => {
     element.addEventListener('change', validateForm)
     element.addEventListener('keyup', validateForm)
@@ -74,35 +68,38 @@ password.addEventListener('change', passwordHandler)
 password.addEventListener('keyup', passwordHandler)
 iconHide.addEventListener('click', showHide)
 iconShow.addEventListener('click', showHide)
-button.addEventListener('click', (e) =>{
+button.addEventListener('click', (e) => {
     e.preventDefault()
     fetch(urlLogin, {
         method: "POST",
         body: new URLSearchParams({
-          email: email.value,
-          password: password.value
+            email: email.value,
+            password: password.value
         }),
         headers: {
-          "Content-type": "application/x-www-form-urlencoded"
+            "Content-type": "application/x-www-form-urlencoded"
         },
         credentials: "include"
-        })
-      .then((res) => {
+    })
+    .then((res) => {
         if (res.status === 200) {
-            if (res.status !== 200) {
-                throw "failed"
-            }
             return res.json()
         }
         throw "failed"
-      })
-      .then((data) => {
-        document.cookie = `username=${data.user[1]}`
-        document.cookie = `email=${data.user[2]}`
+    })
+    .then((data) => {
+        localStorage.setItem('token', data.token)
+        console.log()
+        document.cookie = `token=${data.token}; path=/`
+
+        document.cookie = `username=${data.user.username}; path=/`
+        document.cookie = `email=${data.user.email}; path=/`
+        
         window.location.href = 'http://localhost:3000/dashboard'
-      })
-      .catch(() => {
+    })
+    .catch(() => {
         changeBorder(email, emailHelp, 'failed')
         changeBorder(password, passwordHelp, 'failed')
-      })
+    })
 })
+
