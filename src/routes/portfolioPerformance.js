@@ -22,10 +22,8 @@ const loadJson = (relativePath) => {
 }
 
 const initialPrice = (assetName, boughtDate) => {
-  const itemHistory = loadJson(assetName)
+  const itemHistory = loadJson(assetName + '.json')
   const formatedDate = formatDate(boughtDate)
-  console.log(itemHistory.prices[0][0])
-  console.log(boughtDate)
   let tmp = itemHistory.prices[0][0]
   const firstDate = new Date(tmp)
   const formattedBoughtDate = new Date(formatedDate)
@@ -43,31 +41,26 @@ const initialPrice = (assetName, boughtDate) => {
     return null
   }
   const priceAtBoughtDate = itemHistory.prices[daysDifference][1]
-
-  console.log(`Price on ${formatedDate}:`, priceAtBoughtDate)
-
   return priceAtBoughtDate
 }
 
 router.post('/portfolioPerformance', verifyToken, async (req, res) => {
-  // const { email } = req.body
-  // try {
-  //   const assets = await getUserAssets(email)
-  //   if (!assets || assets.length === 0) {
-  //     return res.status(404).json({ error: 'No assets found for the user' })
-  //   }
-  //   else {
-  //     for (let i = 0; i < assets.length; i++) {
-  //       if (i === 0) {
-  //         initialPrice(assets[i].asset_name, assets[i].bought_date)
-  //       }
-  //     }
-  //   }
-  // } catch (error) {
+  const { email } = req.body
+  let result = 0
+  try {
+    const assets = await getUserAssets(email)
+    if (!assets || assets.length === 0) {
+      return res.status(404).json({ error: 'No assets found for the user' })
+    }
+    else {
+      for (let i = 0; i < assets.length; i++) {
+        result += initialPrice(assets[i].asset_name, assets[i].bought_date)
+      }
+      res.send({result: Math.round(result * 100) / 100})
+    }
+  } catch (error) {
    
-  // }
-  const price = initialPrice('Chroma%20Case.json', 'Nov 16, 2020')
-  console.log(price)
+  }
 })
 
 module.exports = router
