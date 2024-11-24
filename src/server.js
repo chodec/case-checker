@@ -35,6 +35,7 @@ app.use('/asset', verifyToken, countUserAssets)
 app.use('/asset', verifyToken, deleteUserAsset)
 app.use('/asset', verifyToken, portfolioPerformance)
 app.use('/asset', verifyToken, insertAsset)
+app.use('/asset', verifyToken, steamApi)
 
 app.get('/dashboard', verifyToken, (req, res) => {
   res.sendFile(path.join(fePath, '/public/html/dashboard.html'))

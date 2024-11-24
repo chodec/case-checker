@@ -18,11 +18,11 @@ const cookie = Object.fromEntries(document.cookie.split('; ').map(v=>v.split(/=(
 const urlAssetInsert = 'http://localhost:3000/asset/insert'
 const urlGetUserAssets = 'http://localhost:3000/asset/getUserAssets'
 const itemsPerPage = 10
+
 const token = localStorage.getItem('token')
 if (!token) {
   window.location.href = '/login'
 }
-console.log(localStorage.getItem('token'))
 
 let currentPage = 1
 let toggle = true

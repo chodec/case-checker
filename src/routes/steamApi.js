@@ -1,42 +1,50 @@
 const express = require('express')
-const fs = require('fs')
-const router = express.Router()
-const { verifyToken } = require('../middlewares/auth.js')
 const axios = require('axios')
+const { verifyToken } = require('../middlewares/auth.js')
+require('dotenv').config() // Load environment variables
 
-router.get('/pricehistory/case/:filename', verifyToken, (req, res) => {
-    const filename = req.params.filename
-    const encodedFileName = encodeURIComponent(filename)
-    const pathToFile = `./src/db/json/${encodedFileName}.json`
-    fs.readFile(pathToFile, 'utf8', (err, data) => {
-        if (err) {
-            res.status(500).send('Error reading file')
-        } else {
-            try {
-                const jsonData = JSON.parse(data)
-                res.json(jsonData)
-            } catch (parseError) {
-                res.status(500).send('Error parsing JSON data')
-            }
+const router = express.Router()
+
+router.post('/currentprice/case/:filename', verifyToken, async (req, res) => {
+    try {
+        const { filename } = req.params
+
+        if (!filename || typeof filename !== 'string') {
+            return res.status(400).json({ error: 'Invalid or missing filename parameter' })
         }
-    })
-})
 
-router.get('/currentprice/case/:filename', verifyToken, (req, res) => {
-    const filename = req.params.filename
-    const encodedFileName = encodeURIComponent(filename)
-    axios.get(`https://steamcommunity.com/market/priceoverview/?appid=730&market_hash_name=${encodedFileName}&currency=1`)
-        .then((data) => {
-            if (data.status === 200) {
-                res.send(data.data)
-            } else {
-                res.status(500).send('Error fetching current price data')
+        const steamLoginSecure = process.env.STEAM_LOGIN_SECURE
+        if (!steamLoginSecure) {
+            return res.status(500).json({ error: 'Missing STEAM_LOGIN_SECURE environment variable' })
+        }
+
+        const encodedFileName = encodeURIComponent(filename)
+
+        const steamApiUrl = `https://steamcommunity.com/market/priceoverview/?appid=730&market_hash_name=${encodedFileName}&currency=1`
+
+        const response = await axios.get(steamApiUrl, {
+            headers: {
+                Cookie: `steamLoginSecure=${steamLoginSecure}`
             }
         })
-        .catch((error) => {
-            console.error('Error with axios request:', error.message)
-            res.status(500).send('Error fetching data from Steam API')
+
+        if (response.status === 200 && response.data.success) {
+            return res.status(200).json(response.data)
+        } else {
+            return res.status(500).json({
+                error: 'Error fetching current price data from Steam API',
+                details: response.data,
+            })
+        }
+    } catch (error) {
+        console.error('Error with axios request:', error.message)
+
+        return res.status(500).json({
+            error: 'Error fetching data from Steam API',
+            message: error.message,
+            ...(error.response && { steamError: error.response.data }), 
         })
+    }
 })
 
 module.exports = router

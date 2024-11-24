@@ -21,11 +21,11 @@ const loadJson = (relativePath) => {
   }
 }
 
-const initialPrice = (assetName, boughtDate) => {
+const calculatedPrice = (assetName, boughtDate) => {
   const itemHistory = loadJson(assetName + '.json')
   const formatedDate = formatDate(boughtDate)
-  let tmp = itemHistory.prices[0][0]
-  const firstDate = new Date(tmp)
+  const date = itemHistory.prices[0][0]
+  const firstDate = new Date(date)
   const formattedBoughtDate = new Date(formatedDate)
 
   if (isNaN(firstDate.getTime()) || isNaN(formattedBoughtDate.getTime())) {
@@ -41,22 +41,25 @@ const initialPrice = (assetName, boughtDate) => {
     return null
   }
   const priceAtBoughtDate = itemHistory.prices[daysDifference][1]
+  
   return priceAtBoughtDate
 }
 
+
 router.post('/portfolioPerformance', verifyToken, async (req, res) => {
   const { email } = req.body
-  let result = 0
+  let resultVal = 0
   try {
     const assets = await getUserAssets(email)
+    
     if (!assets || assets.length === 0) {
       return res.status(404).json({ error: 'No assets found for the user' })
     }
     else {
       for (let i = 0; i < assets.length; i++) {
-        result += initialPrice(assets[i].asset_name, assets[i].bought_date)
+        resultVal += calculatedPrice(assets[i].asset_name, assets[i].bought_date) * assets[i].asset_count
       }
-      res.send({result: Math.round(result * 100) / 100})
+      res.send({resultVal: Math.round(resultVal * 100) / 100})
     }
   } catch (error) {
    
