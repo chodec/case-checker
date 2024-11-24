@@ -12,8 +12,8 @@ const count = document.getElementById('count')
 const userName = document.getElementById('userName')
 const table = document.getElementById('table')
 const tableFirstChild = document.getElementById('tableFirstChild')
-const cookie = Object.fromEntries(document.cookie.split('; ').map(v=>v.split(/=(.*)/s).map(decodeURIComponent)))
 const paginationContainer = document.querySelector(".pagination")
+const cookie = Object.fromEntries(document.cookie.split('; ').map(v=>v.split(/=(.*)/s).map(decodeURIComponent)))
 
 const urlAssetInsert = 'http://localhost:3000/asset/insert'
 const urlGetUserAssets = 'http://localhost:3000/asset/getUserAssets'
